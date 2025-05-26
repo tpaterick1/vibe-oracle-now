@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import Header from '@/components/layout/Header';
 import MoodSelector from '@/components/MoodSelector';
@@ -5,7 +6,8 @@ import VenueCard from '@/components/VenueCard';
 import { venues as allVenues, Venue, Vibe } from '@/data/venues';
 import Footer from '@/components/layout/Footer';
 import { Info } from 'lucide-react';
-import VenueMap from '@/components/VenueMap'; // Import the map component
+import VenueMap from '@/components/VenueMap';
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel"; // Added carousel imports
 
 // IMPORTANT: Replace "YOUR_GOOGLE_MAPS_API_KEY" with your actual Google Maps API key.
 // For production, consider more secure ways to handle API keys.
@@ -31,7 +33,6 @@ const Index = () => {
   const venuesForMap = useMemo(() => {
     // If a mood is selected, show only filtered venues on the map.
     // If no mood is selected, show the initial "Tonight's Highlights" venues.
-    // Or, you could choose to show all venues if no mood is selected: return allVenues;
     return filteredVenues;
   }, [filteredVenues]);
 
@@ -46,11 +47,45 @@ const Index = () => {
             <h3 className="text-3xl font-semibold mb-8 text-center neon-text-pink animate-fade-in-up" style={{animationDelay: '0.8s'}}>
               {selectedMood ? `Vibes for: ${selectedMood}` : "Tonight's Highlights"}
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-              {filteredVenues.map((venue, index) => (
-                <VenueCard key={venue.id} venue={venue} index={index} />
-              ))}
-            </div>
+
+            {!selectedMood ? (
+              // CAROUSEL for "Tonight's Highlights"
+              <Carousel
+                opts={{
+                  align: "start",
+                  loop: true,
+                }}
+                // w-full max-w-md ensures the carousel itself is centered and sized appropriately
+                // mx-auto centers it. max-w-md (448px) is slightly larger than VenueCard's max-w-sm (384px)
+                // to accommodate buttons if they are positioned slightly outside the content area by default.
+                className="w-full max-w-md mx-auto animate-fade-in-up"
+                style={{ animationDelay: '1s' }} // Animation for the carousel container itself
+              >
+                <CarouselContent>
+                  {filteredVenues.map((venue, index) => (
+                    // flex justify-center ensures the VenueCard (which has max-w-sm) is centered within the CarouselItem
+                    <CarouselItem key={venue.id} className="flex justify-center">
+                      <VenueCard venue={venue} index={index} />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious 
+                  // Default shadcn styling positions these well.
+                  // Adding specific colors to match the theme.
+                  className="text-neon-pink border-neon-pink hover:bg-neon-pink/20 disabled:opacity-50" 
+                />
+                <CarouselNext 
+                  className="text-neon-pink border-neon-pink hover:bg-neon-pink/20 disabled:opacity-50"
+                />
+              </Carousel>
+            ) : (
+              // GRID for selected mood
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                {filteredVenues.map((venue, index) => (
+                  <VenueCard key={venue.id} venue={venue} index={index} />
+                ))}
+              </div>
+            )}
           </div>
         )}
 
@@ -82,3 +117,4 @@ const Index = () => {
 };
 
 export default Index;
+
