@@ -1,27 +1,21 @@
+
 import React, { useState, useMemo } from 'react';
 import Header from '@/components/layout/Header';
 import PromptCarousel from '@/components/PromptCarousel';
 import VenueCard from '@/components/VenueCard';
 import { Vibe, moods, Venue } from '@/data/venues'; // Venue type, moods array, Vibe type
 import Footer from '@/components/layout/Footer';
-import { Info, LogIn, LogOut, Video as VideoIcon, Circle, Loader2 } from 'lucide-react';
+import { Info, LogIn, LogOut, Circle, Loader2 } from 'lucide-react'; // Removed VideoIcon
 import VenueMap from '@/components/VenueMap';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import NightPlanGenerator from '@/components/NightPlanGenerator';
 import { useAuth } from '@/hooks/useAuth';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import WebcamLightbox from '@/components/WebcamLightbox';
+// Removed Dialog components as they were only used for WebcamLightbox
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+// Removed WebcamLightbox import
 
 // IMPORTANT: Replace "YOUR_GOOGLE_MAPS_API_KEY" with your actual Google Maps API key.
 // For production, consider more secure ways to handle API keys.
@@ -62,8 +56,7 @@ const fetchVenues = async (): Promise<Venue[]> => {
 const Index = () => {
   const [selectedMood, setSelectedMood] = useState<Vibe | null>(null);
   const { user, logout, isLoading: authLoading } = useAuth();
-  const [isWebcamDialogOpen, setIsWebcamDialogOpen] = useState(false);
-  const [capturedSelfie, setCapturedSelfie] = useState<string | null>(null);
+  // Removed isWebcamDialogOpen, setIsWebcamDialogOpen, capturedSelfie, setCapturedSelfie states
 
   const allVenuesQuery = useQuery<Venue[], Error>({
     queryKey: ['venues'],
@@ -91,12 +84,7 @@ const Index = () => {
     return filteredVenues.length > 0 ? filteredVenues : allVenuesQuery.data.slice(0,5); 
   }, [selectedMood, filteredVenues, allVenuesQuery.data]);
 
-  const handleSelfieCapture = (imageDataUrl: string) => {
-    console.log("Selfie captured!", imageDataUrl.substring(0, 30) + "..."); // Log a snippet
-    setCapturedSelfie(imageDataUrl);
-    // You could potentially upload this image or use it in the NightPlanGenerator
-    setIsWebcamDialogOpen(false); // Close dialog after capture
-  };
+  // Removed handleSelfieCapture function
 
   return (
     <div className="min-h-screen bg-brand-deep-black text-foreground p-4 md:p-8 selection:bg-neon-pink selection:text-white">
@@ -126,34 +114,7 @@ const Index = () => {
         {/* PromptCarousel */}
         <PromptCarousel selectedMood={selectedMood} onSelectMood={handleSelectMood} />
         
-        {/* Webcam Lightbox Trigger Section - Adjusted to be standalone */}
-        <div className="my-8 md:my-12 flex justify-center">
-          <div className="w-full md:w-3/4 lg:w-2/3 flex flex-col items-center md:items-start animate-fade-in-up" style={{animationDelay: '0.6s'}}>
-            <h3 className="text-3xl font-semibold mb-6 text-center md:text-left neon-text-lavender">Share Your Vibe!</h3>
-            <p className="text-lg text-gray-400 mb-6 text-center md:text-left">
-              Capture a selfie to personalize your night out recommendations.
-            </p>
-            <Dialog open={isWebcamDialogOpen} onOpenChange={setIsWebcamDialogOpen}>
-              <DialogTrigger asChild>
-                <Button variant="outline" size="lg" className="border-neon-lavender text-neon-lavender hover:bg-neon-lavender/20 hover:text-white animate-subtle-pulse">
-                  <VideoIcon className="mr-2 h-5 w-5" /> Open Webcam & Take Selfie
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[625px] bg-brand-deep-black border-neon-teal p-0">
-                <WebcamLightbox 
-                  onClose={() => setIsWebcamDialogOpen(false)}
-                  onImageCapture={handleSelfieCapture}
-                />
-              </DialogContent>
-            </Dialog>
-            {capturedSelfie && (
-              <div className="mt-8 w-full text-center md:text-left">
-                <h4 className="text-xl font-semibold mb-4 neon-text-teal">Your Awesome Selfie:</h4>
-                <img src={capturedSelfie} alt="Your captured selfie" className="mx-auto md:mx-0 rounded-lg shadow-lg max-w-xs border-2 border-neon-pink" />
-              </div>
-            )}
-          </div>
-        </div>
+        {/* Webcam Lightbox Trigger Section - REMOVED */}
 
         {/* Filtered Venues Section */}
         {allVenuesQuery.isLoading && (
@@ -257,3 +218,4 @@ const Index = () => {
 };
 
 export default Index;
+
