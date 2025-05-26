@@ -13,7 +13,7 @@ const VenueCard: React.FC<VenueCardProps> = ({ venue, index }) => {
   return (
     <Card 
       className={cn(
-        "glassmorphism-card w-full overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-[1.02] animate-fade-in-up", // Removed max-w-sm
+        "glassmorphism-card w-full overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-[1.02] animate-fade-in-up",
         venue.neonColorClass, // Applies border color
         `hover:${venue.neonColorClass.replace('border-', 'shadow-')}` // Applies shadow on hover
       )}
@@ -31,9 +31,10 @@ const VenueCard: React.FC<VenueCardProps> = ({ venue, index }) => {
               key={tag} 
               className={cn(
                 "inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2 text-white",
-                // Example: if venue.neonColorClass is 'border-neon-blue', this becomes 'bg-neon-blue/30'
-                // Using Tailwind arbitrary value for background color with opacity
-                `${venue.neonColorClass.replace('border-', 'bg-')}/30` 
+                venue.neonColorClass.replace('border-', 'bg-'), // e.g., bg-neon-blue
+                "bg-opacity-30", // base opacity
+                // hover effects:
+                "transition-all duration-200 ease-in-out hover:scale-105 hover:bg-opacity-60" 
               )}
             >
               #{tag}
