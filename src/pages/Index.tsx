@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import VenueMap from '@/components/VenueMap'; // Added import for VenueMap
 
 // IMPORTANT: Replace "YOUR_GOOGLE_MAPS_API_KEY" with your actual Google Maps API key.
 // For production, consider more secure ways to handle API keys.
