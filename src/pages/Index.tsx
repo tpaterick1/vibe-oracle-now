@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import Header from '@/components/layout/Header';
 import MoodSelector from '@/components/MoodSelector';
@@ -49,21 +48,8 @@ const Index = () => {
       <div className="container mx-auto">
         <Header />
 
-        {/* Map Section - MOVED HERE */}
-        <div className="mt-8 mb-12"> {/* Adjusted margins */}
-           <h3 className="text-3xl font-semibold mb-8 text-center neon-text-teal animate-fade-in-up" style={{animationDelay: '0.4s'}}> {/* Adjusted animation delay */}
-              Find Your Vibe on the Map
-            </h3>
-          <VenueMap 
-            venues={venuesForMap} 
-            apiKey={GOOGLE_MAPS_API_KEY}
-            defaultCenter={ST_AUGUSTINE_COORDS}
-            defaultZoom={13} // Slightly more zoomed out to see more context initially
-          />
-        </div>
-
-        {/* Auth Status and Actions */}
-        <div className="flex justify-end items-center mb-4 space-x-4">
+        {/* Auth Status and Actions - MOVED HERE */}
+        <div className="flex justify-end items-center my-4 sm:my-6 space-x-4"> {/* Adjusted margin */}
           {authLoading ? (
             <span className="text-gray-400">Loading user...</span>
           ) : user ? (
@@ -82,8 +68,23 @@ const Index = () => {
           )}
         </div>
 
+        {/* MoodSelector - MOVED HERE */}
         <MoodSelector selectedMood={selectedMood} onSelectMood={handleSelectMood} />
         
+        {/* Map Section - REMAINS HERE, BUT AFTER MOOD SELECTOR */}
+        <div className="mt-8 mb-12">
+           <h3 className="text-3xl font-semibold mb-8 text-center neon-text-teal animate-fade-in-up" style={{animationDelay: '0.4s'}}>
+              Find Your Vibe on the Map
+            </h3>
+          <VenueMap 
+            venues={venuesForMap} 
+            apiKey={GOOGLE_MAPS_API_KEY}
+            defaultCenter={ST_AUGUSTINE_COORDS}
+            defaultZoom={13}
+          />
+        </div>
+
+        {/* Filtered Venues Section */}
         {filteredVenues.length > 0 && (
           <div className="mt-12 mb-8">
             <h3 className="text-3xl font-semibold mb-8 text-center neon-text-pink animate-fade-in-up" style={{animationDelay: '0.8s'}}>
@@ -133,8 +134,6 @@ const Index = () => {
           </div>
         )}
 
-        {/* VenueMap was here, now removed */}
-
         <NightPlanGenerator />
 
       </div>
@@ -144,4 +143,3 @@ const Index = () => {
 };
 
 export default Index;
-
