@@ -1,10 +1,10 @@
-
 import React, { useState, useMemo } from 'react';
 import Header from '@/components/layout/Header';
 import MoodSelector from '@/components/MoodSelector';
 import VenueCard from '@/components/VenueCard';
 import { venues as allVenues, Venue, Vibe } from '@/data/venues';
-import Footer from '@/components/layout/Footer'; // Import the new Footer component
+import Footer from '@/components/layout/Footer';
+import { Info } from 'lucide-react';
 
 const Index = () => {
   const [selectedMood, setSelectedMood] = useState<Vibe | null>(null);
@@ -42,12 +42,13 @@ const Index = () => {
 
         {selectedMood && filteredVenues.length === 0 && (
            <div className="text-center py-12 animate-fade-in-up" style={{animationDelay: '1s'}}>
+            <Info className="mx-auto h-12 w-12 neon-text-teal mb-4" />
             <p className="text-2xl neon-text-teal">No venues match the "{selectedMood}" vibe right now.</p>
             <p className="text-lg text-gray-400 mt-2">Try another vibe or check back later!</p>
           </div>
         )}
       </div>
-      <Footer /> {/* Use the new Footer component here */}
+      <Footer />
     </div>
   );
 };
