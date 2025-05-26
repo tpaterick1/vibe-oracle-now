@@ -1,21 +1,17 @@
-
 import React, { useState, useMemo } from 'react';
 import Header from '@/components/layout/Header';
 import PromptCarousel from '@/components/PromptCarousel';
 import VenueCard from '@/components/VenueCard';
 import { Vibe, moods, Venue } from '@/data/venues'; // Venue type, moods array, Vibe type
 import Footer from '@/components/layout/Footer';
-import { Info, LogIn, LogOut, Circle, Loader2 } from 'lucide-react'; // Removed VideoIcon
-import VenueMap from '@/components/VenueMap';
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
+import { Info, LogIn, LogOut, Circle, Loader2 } from 'lucide-react';
+// Removed Carousel imports as they are no longer used for "Tonight's Highlights"
 import NightPlanGenerator from '@/components/NightPlanGenerator';
 import { useAuth } from '@/hooks/useAuth';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-// Removed Dialog components as they were only used for WebcamLightbox
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-// Removed WebcamLightbox import
 
 // IMPORTANT: Replace "YOUR_GOOGLE_MAPS_API_KEY" with your actual Google Maps API key.
 // For production, consider more secure ways to handle API keys.
@@ -56,7 +52,6 @@ const fetchVenues = async (): Promise<Venue[]> => {
 const Index = () => {
   const [selectedMood, setSelectedMood] = useState<Vibe | null>(null);
   const { user, logout, isLoading: authLoading } = useAuth();
-  // Removed isWebcamDialogOpen, setIsWebcamDialogOpen, capturedSelfie, setCapturedSelfie states
 
   const allVenuesQuery = useQuery<Venue[], Error>({
     queryKey: ['venues'],
@@ -69,11 +64,11 @@ const Index = () => {
 
   const filteredVenues = useMemo(() => {
     if (!allVenuesQuery.data) {
-      return []; 
+      return [];
     }
     if (!selectedMood) {
-      // Show a few highlights if no mood is selected
-      return allVenuesQuery.data.slice(0, 3); 
+      // Show up to 9 highlights if no mood is selected for the 3-column grid
+      return allVenuesQuery.data.slice(0, 9); 
     }
     return allVenuesQuery.data.filter(venue => venue.vibeTags.includes(selectedMood));
   }, [selectedMood, allVenuesQuery.data]);
@@ -81,10 +76,8 @@ const Index = () => {
   const venuesForMap = useMemo(() => {
     if (!allVenuesQuery.data) return [];
     // If specific venues are filtered, show them. Otherwise, show a default set on the map.
-    return filteredVenues.length > 0 ? filteredVenues : allVenuesQuery.data.slice(0,5); 
+    return filteredVenues.length > 0 ? filteredVenues : allVenuesQuery.data.slice(0,5);
   }, [selectedMood, filteredVenues, allVenuesQuery.data]);
-
-  // Removed handleSelfieCapture function
 
   return (
     <div className="min-h-screen bg-brand-deep-black text-foreground p-4 md:p-8 selection:bg-neon-pink selection:text-white">
@@ -114,8 +107,6 @@ const Index = () => {
         {/* PromptCarousel */}
         <PromptCarousel selectedMood={selectedMood} onSelectMood={handleSelectMood} />
         
-        {/* Webcam Lightbox Trigger Section - REMOVED */}
-
         {/* Filtered Venues Section */}
         {allVenuesQuery.isLoading && (
           <div className="text-center py-12">
@@ -145,31 +136,17 @@ const Index = () => {
             </h3>
 
             {!selectedMood ? (
-              // CAROUSEL for "Tonight's Highlights"
-              <Carousel
-                opts={{
-                  align: "start",
-                  loop: true,
-                }}
-                className="w-full max-w-lg mx-auto animate-fade-in-up"
+              // GRID for "Tonight's Highlights"
+              <div 
+                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 animate-fade-in-up"
                 style={{ animationDelay: '1s' }}
               >
-                <CarouselContent>
-                  {filteredVenues.map((venue, index) => (
-                    <CarouselItem key={venue.id} className="flex justify-center">
-                      <VenueCard venue={venue} index={index} />
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <CarouselPrevious 
-                  className="text-neon-pink border-neon-pink hover:bg-neon-pink/20 disabled:opacity-50 transition-transform duration-200 ease-in-out hover:scale-110" 
-                />
-                <CarouselNext 
-                  className="text-neon-pink border-neon-pink hover:bg-neon-pink/20 disabled:opacity-50 transition-transform duration-200 ease-in-out hover:scale-110"
-                />
-              </Carousel>
+                {filteredVenues.map((venue, index) => (
+                  <VenueCard key={venue.id} venue={venue} index={index} />
+                ))}
+              </div>
             ) : (
-              // GRID for selected mood
+              // GRID for selected mood (existing logic)
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                 {filteredVenues.map((venue, index) => (
                   <VenueCard key={venue.id} venue={venue} index={index} />
@@ -188,7 +165,7 @@ const Index = () => {
         
         <NightPlanGenerator />
 
-        {/* Map Section - Moved to bottom, centered and expanded */}
+        {/* Map Section */}
         <div className="my-12 md:my-16 w-full">
            <h3 className="text-3xl font-semibold mb-6 text-center neon-text-teal animate-fade-in-up" style={{animationDelay: '0.4s'}}>
               Find Your Vibe on the Map
@@ -210,7 +187,6 @@ const Index = () => {
             />
           )}
         </div>
-
       </div>
       <Footer />
     </div>
@@ -218,4 +194,3 @@ const Index = () => {
 };
 
 export default Index;
-
