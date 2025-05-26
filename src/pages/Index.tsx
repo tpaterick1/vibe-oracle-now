@@ -4,13 +4,23 @@ import MoodSelector from '@/components/MoodSelector';
 import VenueCard from '@/components/VenueCard';
 import { venues as allVenues, Venue, Vibe } from '@/data/venues';
 import Footer from '@/components/layout/Footer';
-import { Info, LogIn, LogOut } from 'lucide-react';
+import { Info, LogIn, LogOut, Video as VideoIcon } from 'lucide-react';
 import VenueMap from '@/components/VenueMap';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import NightPlanGenerator from '@/components/NightPlanGenerator';
 import { useAuth } from '@/hooks/useAuth';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import WebcamLightbox from '@/components/WebcamLightbox';
 
 // IMPORTANT: Replace "YOUR_GOOGLE_MAPS_API_KEY" with your actual Google Maps API key.
 // For production, consider more secure ways to handle API keys.
@@ -22,6 +32,8 @@ const ST_AUGUSTINE_COORDS = { lat: 29.894695, lng: -81.314493 };
 const Index = () => {
   const [selectedMood, setSelectedMood] = useState<Vibe | null>(null);
   const { user, logout, isLoading: authLoading } = useAuth();
+  const [isWebcamDialogOpen, setIsWebcamDialogOpen] = useState(false);
+  const [capturedSelfie, setCapturedSelfie] = useState<string | null>(null);
 
   const handleSelectMood = (mood: Vibe) => {
     setSelectedMood(prevMood => prevMood === mood ? null : mood);
@@ -35,20 +47,22 @@ const Index = () => {
   }, [selectedMood]);
 
   const venuesForMap = useMemo(() => {
-    // If a mood is selected, show only filtered venues on the map.
-    // If no mood is selected (showing "Tonight's Highlights"), show all venues or a default set.
-    // For simplicity, let's show all venues if no mood is selected,
-    // or you could use the same logic as filteredVenues for "Tonight's Highlights".
-    // return selectedMood ? filteredVenues : allVenues; 
-    return filteredVenues.length > 0 ? filteredVenues : allVenues.slice(0,5); // Show first 5 if no selection or no match
+    return filteredVenues.length > 0 ? filteredVenues : allVenues.slice(0,5); 
   }, [selectedMood, filteredVenues]);
+
+  const handleSelfieCapture = (imageDataUrl: string) => {
+    console.log("Selfie captured!", imageDataUrl.substring(0, 30) + "..."); // Log a snippet
+    setCapturedSelfie(imageDataUrl);
+    // You could potentially upload this image or use it in the NightPlanGenerator
+    setIsWebcamDialogOpen(false); // Close dialog after capture
+  };
 
   return (
     <div className="min-h-screen bg-brand-deep-black text-foreground p-4 md:p-8 selection:bg-neon-pink selection:text-white">
       <div className="container mx-auto">
         <Header />
 
-        {/* Auth Status and Actions - MOVED HERE */}
+        {/* Auth Status and Actions */}
         <div className="flex justify-end items-center my-4 sm:my-6 space-x-4"> {/* Adjusted margin */}
           {authLoading ? (
             <span className="text-gray-400">Loading user...</span>
@@ -68,10 +82,10 @@ const Index = () => {
           )}
         </div>
 
-        {/* MoodSelector - MOVED HERE */}
+        {/* MoodSelector */}
         <MoodSelector selectedMood={selectedMood} onSelectMood={handleSelectMood} />
         
-        {/* Map Section - REMAINS HERE, BUT AFTER MOOD SELECTOR */}
+        {/* Map Section */}
         <div className="mt-8 mb-12">
            <h3 className="text-3xl font-semibold mb-8 text-center neon-text-teal animate-fade-in-up" style={{animationDelay: '0.4s'}}>
               Find Your Vibe on the Map
@@ -135,6 +149,33 @@ const Index = () => {
         )}
 
         <NightPlanGenerator />
+
+        {/* Webcam Lightbox Trigger Section */}
+        <div className="my-12 text-center animate-fade-in-up" style={{animationDelay: '1.2s'}}>
+          <h3 className="text-3xl font-semibold mb-6 neon-text-lavender">Share Your Vibe!</h3>
+          <p className="text-lg text-gray-400 mb-6">
+            Capture a selfie to personalize your night out recommendations.
+          </p>
+          <Dialog open={isWebcamDialogOpen} onOpenChange={setIsWebcamDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="lg" className="border-neon-lavender text-neon-lavender hover:bg-neon-lavender/20 hover:text-white animate-subtle-pulse">
+                <VideoIcon className="mr-2 h-5 w-5" /> Open Webcam & Take Selfie
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[625px] bg-brand-deep-black border-neon-teal p-0">
+              <WebcamLightbox 
+                onClose={() => setIsWebcamDialogOpen(false)}
+                onImageCapture={handleSelfieCapture}
+              />
+            </DialogContent>
+          </Dialog>
+          {capturedSelfie && (
+            <div className="mt-8">
+              <h4 className="text-xl font-semibold mb-4 neon-text-teal">Your Awesome Selfie:</h4>
+              <img src={capturedSelfie} alt="Your captured selfie" className="mx-auto rounded-lg shadow-lg max-w-xs border-2 border-neon-pink" />
+            </div>
+          )}
+        </div>
 
       </div>
       <Footer />
