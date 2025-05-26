@@ -4,15 +4,15 @@ export type Vibe = "Alive" | "Romantic" | "Peaceful" | "Energetic" | "Chill" | "
 export interface Venue {
   id: string;
   name: string;
-  vibeTags: Vibe[]; // This will be mapped from vibe_tags
+  vibeTags: Vibe[]; // This is mapped from vibe_tags and elements are cast to Vibe
   story: string | null;
   image: string | null;
-  neonColorClass: string | null; // This will be mapped from neon_color_class
-  textColorClass: string | null; // This will be mapped from text_color_class
+  neonColorClass: string | null; // This is mapped from neon_color_class
+  textColorClass: string | null; // This is mapped from text_color_class
   lat: number;
   lng: number;
-  created_at: string;
-  updated_at: string;
+  created_at: string; // Added from Supabase
+  updated_at: string; // Added from Supabase
 }
 
 export const moods: { name: Vibe; color: string, shadow: string }[] = [
@@ -26,4 +26,4 @@ export const moods: { name: Vibe; color: string, shadow: string }[] = [
   { name: "Intellectual", color: "bg-neon-indigo", shadow: "shadow-neon-indigo" },
 ];
 
-// The 'venues' array is removed from here as data will be fetched from Supabase.
+// The static 'venues' array has been removed as data is now fetched from Supabase.
