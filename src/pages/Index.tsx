@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import Header from '@/components/layout/Header';
 import MoodSelector from '@/components/MoodSelector';
@@ -85,18 +86,49 @@ const Index = () => {
         {/* MoodSelector */}
         <MoodSelector selectedMood={selectedMood} onSelectMood={handleSelectMood} />
         
-        {/* Map Section */}
-        <div className="mt-8 mb-12">
-           <h3 className="text-3xl font-semibold mb-8 text-center neon-text-teal animate-fade-in-up" style={{animationDelay: '0.4s'}}>
-              Find Your Vibe on the Map
-            </h3>
-          <VenueMap 
-            venues={venuesForMap} 
-            apiKey={GOOGLE_MAPS_API_KEY}
-            defaultCenter={ST_AUGUSTINE_COORDS}
-            defaultZoom={13}
-          />
+        {/* Combined Map and Webcam Section */}
+        <div className="flex flex-col md:flex-row gap-8 my-8 md:my-12">
+          {/* Map Section (Left Side on md screens) */}
+          <div className="md:w-1/2 flex flex-col">
+             <h3 className="text-3xl font-semibold mb-6 text-center md:text-left neon-text-teal animate-fade-in-up" style={{animationDelay: '0.4s'}}>
+                Find Your Vibe
+              </h3>
+            <VenueMap 
+              venues={venuesForMap} 
+              apiKey={GOOGLE_MAPS_API_KEY}
+              defaultCenter={ST_AUGUSTINE_COORDS}
+              defaultZoom={13}
+            />
+          </div>
+
+          {/* Webcam Lightbox Trigger Section (Right Side on md screens) */}
+          <div className="md:w-1/2 flex flex-col items-center md:items-start animate-fade-in-up" style={{animationDelay: '0.6s'}}>
+            <h3 className="text-3xl font-semibold mb-6 text-center md:text-left neon-text-lavender">Share Your Vibe!</h3>
+            <p className="text-lg text-gray-400 mb-6 text-center md:text-left">
+              Capture a selfie to personalize your night out recommendations.
+            </p>
+            <Dialog open={isWebcamDialogOpen} onOpenChange={setIsWebcamDialogOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="lg" className="border-neon-lavender text-neon-lavender hover:bg-neon-lavender/20 hover:text-white animate-subtle-pulse">
+                  <VideoIcon className="mr-2 h-5 w-5" /> Open Webcam & Take Selfie
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[625px] bg-brand-deep-black border-neon-teal p-0">
+                <WebcamLightbox 
+                  onClose={() => setIsWebcamDialogOpen(false)}
+                  onImageCapture={handleSelfieCapture}
+                />
+              </DialogContent>
+            </Dialog>
+            {capturedSelfie && (
+              <div className="mt-8 w-full text-center md:text-left">
+                <h4 className="text-xl font-semibold mb-4 neon-text-teal">Your Awesome Selfie:</h4>
+                <img src={capturedSelfie} alt="Your captured selfie" className="mx-auto md:mx-0 rounded-lg shadow-lg max-w-xs border-2 border-neon-pink" />
+              </div>
+            )}
+          </div>
         </div>
+
 
         {/* Filtered Venues Section */}
         {filteredVenues.length > 0 && (
@@ -149,33 +181,6 @@ const Index = () => {
         )}
 
         <NightPlanGenerator />
-
-        {/* Webcam Lightbox Trigger Section */}
-        <div className="my-12 text-center animate-fade-in-up" style={{animationDelay: '1.2s'}}>
-          <h3 className="text-3xl font-semibold mb-6 neon-text-lavender">Share Your Vibe!</h3>
-          <p className="text-lg text-gray-400 mb-6">
-            Capture a selfie to personalize your night out recommendations.
-          </p>
-          <Dialog open={isWebcamDialogOpen} onOpenChange={setIsWebcamDialogOpen}>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="lg" className="border-neon-lavender text-neon-lavender hover:bg-neon-lavender/20 hover:text-white animate-subtle-pulse">
-                <VideoIcon className="mr-2 h-5 w-5" /> Open Webcam & Take Selfie
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[625px] bg-brand-deep-black border-neon-teal p-0">
-              <WebcamLightbox 
-                onClose={() => setIsWebcamDialogOpen(false)}
-                onImageCapture={handleSelfieCapture}
-              />
-            </DialogContent>
-          </Dialog>
-          {capturedSelfie && (
-            <div className="mt-8">
-              <h4 className="text-xl font-semibold mb-4 neon-text-teal">Your Awesome Selfie:</h4>
-              <img src={capturedSelfie} alt="Your captured selfie" className="mx-auto rounded-lg shadow-lg max-w-xs border-2 border-neon-pink" />
-            </div>
-          )}
-        </div>
 
       </div>
       <Footer />
