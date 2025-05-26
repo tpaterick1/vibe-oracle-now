@@ -13,7 +13,7 @@ const VenueCard: React.FC<VenueCardProps> = ({ venue, index }) => {
   return (
     <Card 
       className={cn(
-        "glassmorphism-card w-full max-w-sm overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-[1.02] animate-fade-in-up", // Added hover:scale-[1.02]
+        "glassmorphism-card w-full overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-[1.02] animate-fade-in-up", // Removed max-w-sm
         venue.neonColorClass, // Applies border color
         `hover:${venue.neonColorClass.replace('border-', 'shadow-')}` // Applies shadow on hover
       )}

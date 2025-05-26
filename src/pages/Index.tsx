@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import Header from '@/components/layout/Header';
 import MoodSelector from '@/components/MoodSelector';
@@ -53,12 +54,12 @@ const Index = () => {
                   align: "start",
                   loop: true,
                 }}
-                className="w-full max-w-md mx-auto animate-fade-in-up"
+                className="w-full max-w-lg mx-auto animate-fade-in-up" // Changed max-w-md to max-w-lg
                 style={{ animationDelay: '1s' }}
               >
                 <CarouselContent>
                   {filteredVenues.map((venue, index) => (
-                    <CarouselItem key={venue.id} className="flex justify-center">
+                    <CarouselItem key={venue.id} className="flex justify-center"> {/* CarouselItem is basis-full by default */}
                       <VenueCard venue={venue} index={index} />
                     </CarouselItem>
                   ))}
