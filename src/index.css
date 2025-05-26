@@ -5,7 +5,7 @@
 
 @layer base {
   :root {
-    /* Default to dark theme values */
+    /* ... keep existing code (root CSS variables) */
     --background: 222.2 84% 4.9%; /* Dark background */
     --foreground: 210 40% 98%; /* Light text */
 
@@ -37,8 +37,7 @@
     --radius: 0.75rem; /* Slightly larger radius for modern feel */
   }
 
-  /* Ensure html has dark class if you want to toggle light/dark later */
-  /* For now, we're hardcoding dark theme essentially via root variables */
+  /* ... keep existing code (html dark class comment) */
 }
 
 @layer base {
@@ -47,52 +46,66 @@
   }
   body {
     @apply text-foreground;
-    /* Using a subtle gradient from deep black to charcoal for more depth */
+    /* ... keep existing code (body background and font) */
     background: linear-gradient(180deg, theme('colors.brand-deep-black') 0%, theme('colors.brand-charcoal') 100%);
     min-height: 100vh; /* Ensures gradient covers the full viewport height */
     font-family: 'Poppins', sans-serif; /* Adding Poppins font */
   }
-  /* Add Poppins font import in index.html */
+  /* ... keep existing code (Poppins font import comment) */
 }
 
 @layer components {
   .glassmorphism-card {
+    /* ... keep existing code (glassmorphism-card styles) */
     @apply bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-20;
     background-color: rgba(26, 26, 26, 0.5); /* charcoal with opacity */
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
-  .neon-text-blue {
-    color: #00CFFF;
-    text-shadow: 0 0 5px #00CFFF, 0 0 10px #00CFFF;
+  /* Updated neon-text utility classes with new, more mature hex codes */
+  .neon-text-blue { /* Was #00CFFF */
+    color: #4A90E2;
+    text-shadow: 0 0 5px #4A90E2, 0 0 10px #4A90E2;
   }
-  .neon-text-pink {
-    color: #FF00AA;
-    text-shadow: 0 0 5px #FF00AA, 0 0 10px #FF00AA;
+  .neon-text-pink { /* Was #FF00AA */
+    color: #D94F7A;
+    text-shadow: 0 0 5px #D94F7A, 0 0 10px #D94F7A;
   }
-  .neon-text-purple {
-    color: #A020F0;
-    text-shadow: 0 0 5px #A020F0, 0 0 10px #A020F0;
+  .neon-text-purple { /* Was #A020F0 */
+    color: #8360B3;
+    text-shadow: 0 0 5px #8360B3, 0 0 10px #8360B3;
   }
-   .neon-text-red {
-    color: #FF1D58;
-    text-shadow: 0 0 5px #FF1D58, 0 0 10px #FF1D58;
+   .neon-text-red { /* Was #FF1D58 */
+    color: #C94C4C;
+    text-shadow: 0 0 5px #C94C4C, 0 0 10px #C94C4C;
   }
-  .neon-text-teal {
-    color: #00FCA8;
-    text-shadow: 0 0 5px #00FCA8, 0 0 10px #00FCA8;
+  .neon-text-teal { /* Was #00FCA8 */
+    color: #43A08B;
+    text-shadow: 0 0 5px #43A08B, 0 0 10px #43A08B;
   }
-  .neon-text-lavender {
-    color: #C37EF5;
-    text-shadow: 0 0 5px #C37EF5, 0 0 10px #C37EF5;
+  .neon-text-lavender { /* Was #C37EF5 */
+    color: #A48BCC;
+    text-shadow: 0 0 5px #A48BCC, 0 0 10px #A48BCC;
   }
+  /* Assuming neon-orange and neon-indigo might also have text utilities,
+     though they weren't explicitly in the original index.css.
+     If they are needed, they would follow this pattern:
+  .neon-text-orange {
+    color: #E87E04;
+    text-shadow: 0 0 5px #E87E04, 0 0 10px #E87E04;
+  }
+  .neon-text-indigo {
+    color: #5B79C8;
+    text-shadow: 0 0 5px #5B79C8, 0 0 10px #5B79C8;
+  }
+  */
 }
 
 @layer utilities {
+  /* ... keep existing code (animation delay utilities) */
   .animation-delay-200 {
     animation-delay: 0.2s;
   }
   .animation-delay-400 {
     animation-delay: 0.4s;
   }
-  /* You can add more specific animation delay utilities if needed */
 }
