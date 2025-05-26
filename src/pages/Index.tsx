@@ -52,8 +52,11 @@ const fetchVenues = async (): Promise<Venue[]> => {
     console.error('Error fetching venues:', error);
     throw new Error(error.message);
   }
-  // Ensure vibeTags is always an array, even if null from DB (though schema says NOT NULL)
-  return data?.map(venue => ({ ...venue, vibeTags: venue.vibeTags || [] })) || [];
+  // Ensure vibeTags is always an array and cast its elements to Vibe
+  return data?.map(venue => ({ 
+    ...venue, 
+    vibeTags: (venue.vibeTags || []).map(tag => tag as Vibe) // Explicitly cast each tag
+  })) || [];
 };
 
 const Index = () => {
@@ -176,7 +179,6 @@ const Index = () => {
           </div>
         </div>
 
-
         {/* Filtered Venues Section */}
         {allVenuesQuery.isLoading && (
           <div className="text-center py-12">
@@ -247,7 +249,7 @@ const Index = () => {
             <p className="text-lg text-gray-400 mt-2">Try another vibe or check back later!</p>
           </div>
         )}
-
+        
         <NightPlanGenerator />
 
       </div>
