@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import Header from '@/components/layout/Header';
 import MoodSelector from '@/components/MoodSelector';
@@ -7,7 +6,8 @@ import { venues as allVenues, Venue, Vibe } from '@/data/venues';
 import Footer from '@/components/layout/Footer';
 import { Info } from 'lucide-react';
 import VenueMap from '@/components/VenueMap';
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel"; // Added carousel imports
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
+import NightPlanGenerator from '@/components/NightPlanGenerator';
 
 // IMPORTANT: Replace "YOUR_GOOGLE_MAPS_API_KEY" with your actual Google Maps API key.
 // For production, consider more secure ways to handle API keys.
@@ -31,8 +31,6 @@ const Index = () => {
   }, [selectedMood]);
 
   const venuesForMap = useMemo(() => {
-    // If a mood is selected, show only filtered venues on the map.
-    // If no mood is selected, show the initial "Tonight's Highlights" venues.
     return filteredVenues;
   }, [filteredVenues]);
 
@@ -55,23 +53,17 @@ const Index = () => {
                   align: "start",
                   loop: true,
                 }}
-                // w-full max-w-md ensures the carousel itself is centered and sized appropriately
-                // mx-auto centers it. max-w-md (448px) is slightly larger than VenueCard's max-w-sm (384px)
-                // to accommodate buttons if they are positioned slightly outside the content area by default.
                 className="w-full max-w-md mx-auto animate-fade-in-up"
-                style={{ animationDelay: '1s' }} // Animation for the carousel container itself
+                style={{ animationDelay: '1s' }}
               >
                 <CarouselContent>
                   {filteredVenues.map((venue, index) => (
-                    // flex justify-center ensures the VenueCard (which has max-w-sm) is centered within the CarouselItem
                     <CarouselItem key={venue.id} className="flex justify-center">
                       <VenueCard venue={venue} index={index} />
                     </CarouselItem>
                   ))}
                 </CarouselContent>
                 <CarouselPrevious 
-                  // Default shadcn styling positions these well.
-                  // Adding specific colors to match the theme.
                   className="text-neon-pink border-neon-pink hover:bg-neon-pink/20 disabled:opacity-50" 
                 />
                 <CarouselNext 
@@ -97,7 +89,6 @@ const Index = () => {
           </div>
         )}
 
-        {/* Add the map component here */}
         <div className="mt-12">
            <h3 className="text-3xl font-semibold mb-8 text-center neon-text-teal animate-fade-in-up" style={{animationDelay: '1s'}}>
               Find them on the Map
@@ -110,6 +101,8 @@ const Index = () => {
           />
         </div>
 
+        <NightPlanGenerator />
+
       </div>
       <Footer />
     </div>
@@ -117,4 +110,3 @@ const Index = () => {
 };
 
 export default Index;
-

@@ -1,0 +1,158 @@
+
+import React, { useState } from 'react';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Loader2 } from 'lucide-react';
+
+const NightPlanGenerator: React.FC = () => {
+  const [apiKey, setApiKey] = useState<string>('');
+  const [budget, setBudget] = useState<string>('moderate'); // e.g., 'cheap', 'moderate', 'fancy'
+  const [time, setTime] = useState<string>('evening'); // e.g., 'early evening', 'late night'
+  const [numPeople, setNumPeople] = useState<string>('2');
+  const [generatedPlan, setGeneratedPlan] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleGeneratePlan = async () => {
+    if (!apiKey) {
+      setError("Please enter your Perplexity API Key. For production, store this securely using Supabase.");
+      return;
+    }
+    setIsLoading(true);
+    setError(null);
+    setGeneratedPlan('');
+
+    const prompt = `Generate a fun and unique night out plan in St. Augustine, Florida for ${numPeople} people, with a ${budget} budget, for the ${time}. Suggest 2-3 distinct venues or activities with brief, exciting descriptions. The output should be a concise plan.`;
+
+    try {
+      console.log("Sending request to Perplexity API...");
+      const response = await fetch('https://api.perplexity.ai/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'llama-3.1-sonar-small-128k-online',
+          messages: [
+            { role: 'system', content: 'You are a helpful assistant that generates exciting night out plans in St. Augustine, Florida. Be concise and focus on actionable suggestions.' },
+            { role: 'user', content: prompt },
+          ],
+          temperature: 0.7, // A bit of creativity
+          max_tokens: 300,
+        }),
+      });
+
+      console.log("Response status:", response.status);
+      const responseData = await response.json();
+      console.log("Response data:", responseData);
+
+      if (!response.ok) {
+        throw new Error(responseData.error?.message || `API Error: ${response.status}`);
+      }
+
+      if (responseData.choices && responseData.choices.length > 0 && responseData.choices[0].message) {
+        setGeneratedPlan(responseData.choices[0].message.content);
+      } else {
+        throw new Error("No plan generated or unexpected response structure.");
+      }
+    } catch (err: any) {
+      console.error("Error generating plan:", err);
+      setError(err.message || "Failed to generate plan. Check console for details.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <Card className="w-full max-w-2xl mx-auto my-12 glassmorphism-card border-neon-purple animate-fade-in-up" style={{animationDelay: '1.2s'}}>
+      <CardHeader>
+        <CardTitle className="neon-text-purple text-2xl md:text-3xl text-center">Generate Your Perfect Night Out</CardTitle>
+        <CardDescription className="text-center text-gray-400">
+          Let AI craft a personalized plan for your St. Augustine adventure!
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="space-y-2">
+          <Label htmlFor="apiKey" className="text-gray-300">Perplexity API Key (Temporary)</Label>
+          <Input
+            id="apiKey"
+            type="password"
+            value={apiKey}
+            onChange={(e) => setApiKey(e.target.value)}
+            placeholder="Enter your Perplexity API Key"
+            className="bg-brand-charcoal border-gray-700 text-white placeholder-gray-500 focus:border-neon-purple"
+          />
+          <p className="text-xs text-gray-500">For testing only. Store securely (e.g., via Supabase) for production.</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="budget" className="text-gray-300">Budget</Label>
+            <Input
+              id="budget"
+              value={budget}
+              onChange={(e) => setBudget(e.target.value)}
+              placeholder="e.g., $, $$, $$$ or casual, moderate, fancy"
+              className="bg-brand-charcoal border-gray-700 text-white placeholder-gray-500 focus:border-neon-purple"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="time" className="text-gray-300">Time of Night</Label>
+            <Input
+              id="time"
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+              placeholder="e.g., Evening, Late Night"
+              className="bg-brand-charcoal border-gray-700 text-white placeholder-gray-500 focus:border-neon-purple"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="numPeople" className="text-gray-300">Number of People</Label>
+            <Input
+              id="numPeople"
+              type="number"
+              value={numPeople}
+              onChange={(e) => setNumPeople(e.target.value)}
+              placeholder="e.g., 2"
+              min="1"
+              className="bg-brand-charcoal border-gray-700 text-white placeholder-gray-500 focus:border-neon-purple"
+            />
+          </div>
+        </div>
+        <Button
+          onClick={handleGeneratePlan}
+          disabled={isLoading}
+          className="w-full bg-neon-purple hover:bg-fuchsia-600 text-white font-semibold py-3 text-lg"
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+              Generating...
+            </>
+          ) : (
+            "Generate Plan"
+          )}
+        </Button>
+        {error && <p className="text-neon-red text-center mt-4">{error}</p>}
+      </CardContent>
+      {generatedPlan && (
+        <CardFooter className="flex-col items-start space-y-2">
+           <h4 className="text-xl font-semibold text-neon-purple">Your AI-Crafted Plan:</h4>
+          <Textarea
+            value={generatedPlan}
+            readOnly
+            rows={8}
+            className="w-full bg-brand-deep-black border-gray-700 text-gray-200 p-3 rounded-md whitespace-pre-wrap"
+          />
+        </CardFooter>
+      )}
+    </Card>
+  );
+};
+
+export default NightPlanGenerator;
+
