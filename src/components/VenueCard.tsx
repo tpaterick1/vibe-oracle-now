@@ -24,7 +24,7 @@ const VenueCard: React.FC<VenueCardProps> = ({ venue, index }) => {
         <CardTitle className={cn("text-2xl font-bold", venue.textColorClass)}>{venue.name}</CardTitle>
       </CardHeader>
       <CardContent>
-        <CardDescription className="text-gray-300 text-base">{venue.story}</CardDescription>
+        <CardDescription className="text-muted-foreground text-base">{venue.story}</CardDescription>
         <div className="mt-4">
           {venue.vibeTags.map(tag => (
             <span 
@@ -47,3 +47,4 @@ const VenueCard: React.FC<VenueCardProps> = ({ venue, index }) => {
 };
 
 export default VenueCard;
+

@@ -88,7 +88,7 @@ const Index = () => {
         {/* Auth Status and Actions */}
         <div className="flex justify-end items-center my-4 sm:my-6 space-x-4"> {/* Adjusted margin */}
           {authLoading ? (
-            <span className="text-gray-400">Loading user...</span>
+            <span className="text-muted-foreground">Loading user...</span>
           ) : user ? (
             <>
               <span className="text-neon-teal hidden sm:inline">Welcome, {user.email}!</span>
@@ -122,7 +122,7 @@ const Index = () => {
           <div className="text-center py-12">
             <Info className="mx-auto h-12 w-12 neon-text-red mb-4" />
             <p className="text-2xl neon-text-red">Could not load venues.</p>
-            <p className="text-lg text-gray-400 mt-2">{allVenuesQuery.error?.message}</p>
+            <p className="text-lg text-muted-foreground mt-2">{allVenuesQuery.error?.message}</p>
           </div>
         )}
         {allVenuesQuery.isSuccess && filteredVenues.length > 0 && (
@@ -163,7 +163,7 @@ const Index = () => {
            <div className="text-center py-12 animate-fade-in-up" style={{animationDelay: '1s'}}>
             <Info className="mx-auto h-8 w-8 md:h-12 md:w-12 neon-text-teal mb-4" />
             <p className="text-2xl neon-text-teal">No venues match the "{selectedMood}" vibe right now.</p>
-            <p className="text-lg text-gray-400 mt-2">Try another vibe or check back later!</p>
+            <p className="text-lg text-muted-foreground mt-2">Try another vibe or check back later!</p>
           </div>
         )}
         

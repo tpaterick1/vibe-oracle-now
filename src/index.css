@@ -5,36 +5,46 @@
 
 @layer base {
   :root {
-    /* ... keep existing code (root CSS variables) */
+    /* Core Colors */
     --background: 222.2 84% 4.9%; /* Dark background */
-    --foreground: 210 40% 98%; /* Light text */
+    --foreground: 210 0% 100%; /* Light text -> White */
 
+    /* Card Styles */
     --card: 222.2 84% 7%; /* Darker card for glassmorphism base */
-    --card-foreground: 210 40% 98%;
+    --card-foreground: 210 0% 100%; /* -> White */
 
+    /* Popover Styles */
     --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover-foreground: 210 0% 100%; /* -> White */
 
-    --primary: 210 40% 98%; /* Light primary for dark theme */
-    --primary-foreground: 222.2 47.4% 11.2%; /* Dark text on light primary */
+    /* Primary Action Styles */
+    --primary: 210 40% 98%; /* Default: Light primary (consider changing to a neon if buttons need neon bg) */
+    --primary-foreground: 210 0% 100%; /* Text on primary -> White */
 
+    /* Secondary Action Styles */
     --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary-foreground: 210 0% 100%; /* -> White */
 
+    /* Muted Text Styles */
     --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted-foreground: 210 20% 85%; /* Lighter gray for muted text */
 
+    /* Accent Styles */
     --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent-foreground: 210 0% 100%; /* -> White */
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    /* Destructive Action Styles */
+    --destructive: 0 62.8% 30.6%; /* e.g., Red */
+    --destructive-foreground: 210 0% 100%; /* -> White */
 
-    --border: 217.2 32.6% 27.5%; /* Slightly lighter border for dark theme */
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    /* Borders and Inputs */
+    /* Using HSL for neon-teal (#43A08B approx hsl(165, 40%, 45%)) */
+    --border: 165 40% 45%; /* Default border color -> Neon Teal */
+    --input: 165 40% 45%;  /* Input border color -> Neon Teal (also used by border-input class) */
+    --ring: 212.7 26.8% 83.9%; /* Focus ring */
 
-    --radius: 0.75rem; /* Slightly larger radius for modern feel */
+    /* Radius */
+    --radius: 0.75rem;
   }
 
   /* ... keep existing code (html dark class comment) */
@@ -42,10 +52,10 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border; /* Applies the default neon border color to elements with 'border' class */
   }
   body {
-    @apply text-foreground;
+    @apply text-foreground; /* Default text color for the body will be white */
     /* ... keep existing code (body background and font) */
     background: linear-gradient(180deg, theme('colors.brand-deep-black') 0%, theme('colors.brand-charcoal') 100%);
     min-height: 100vh; /* Ensures gradient covers the full viewport height */
@@ -56,12 +66,12 @@
 
 @layer components {
   .glassmorphism-card {
-    /* ... keep existing code (glassmorphism-card styles) */
     @apply bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-20;
     background-color: rgba(26, 26, 26, 0.5); /* charcoal with opacity */
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    /* border: 1px solid rgba(255, 255, 255, 0.1); /* Old subtle border */
+    border: 1px solid hsl(var(--border)); /* New default neon border (Neon Teal) */
   }
-  /* Updated neon-text utility classes with new, more mature hex codes */
+  /* ... keep existing code (Updated neon-text utility classes) */
   .neon-text-blue { /* Was #00CFFF */
     color: #4A90E2;
     text-shadow: 0 0 5px #4A90E2, 0 0 10px #4A90E2;
@@ -86,18 +96,6 @@
     color: #A48BCC;
     text-shadow: 0 0 5px #A48BCC, 0 0 10px #A48BCC;
   }
-  /* Assuming neon-orange and neon-indigo might also have text utilities,
-     though they weren't explicitly in the original index.css.
-     If they are needed, they would follow this pattern:
-  .neon-text-orange {
-    color: #E87E04;
-    text-shadow: 0 0 5px #E87E04, 0 0 10px #E87E04;
-  }
-  .neon-text-indigo {
-    color: #5B79C8;
-    text-shadow: 0 0 5px #5B79C8, 0 0 10px #5B79C8;
-  }
-  */
 }
 
 @layer utilities {
@@ -109,3 +107,4 @@
     animation-delay: 0.4s;
   }
 }
+

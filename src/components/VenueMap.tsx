@@ -16,7 +16,7 @@ const VenueMap: React.FC<VenueMapProps> = ({ venues, apiKey, defaultCenter, defa
     return (
       <div className="p-4 my-8 text-center bg-brand-charcoal rounded-lg shadow-lg">
         <p className="text-neon-pink">Google Maps API Key is missing or is a placeholder.</p>
-        <p className="text-gray-400">Please provide a valid API key in `src/pages/Index.tsx` to display the map.</p>
+        <p className="text-muted-foreground">Please provide a valid API key in `src/pages/Index.tsx` to display the map.</p>
       </div>
     );
   }
@@ -54,3 +54,4 @@ const VenueMap: React.FC<VenueMapProps> = ({ venues, apiKey, defaultCenter, defa
 };
 
 export default VenueMap;
+

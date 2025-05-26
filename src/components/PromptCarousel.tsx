@@ -38,11 +38,11 @@ const PromptCarousel: React.FC<PromptCarouselProps> = ({ selectedMood, onSelectM
               onClick={() => onSelectMood(mood.name)}
               className={cn(
                 "text-lg px-6 py-5 rounded-lg border-2 transition-all duration-300 ease-in-out transform hover:scale-105 focus:scale-105",
-                "glassmorphism-card border-opacity-50 hover:border-opacity-100",
+                "glassmorphism-card border-opacity-50 hover:border-opacity-100", // glassmorphism-card now provides default neon border
                 selectedMood === mood.name
-                  ? `${mood.color} text-white ${mood.shadow} border-transparent scale-105`
-                  : "text-gray-300 border-gray-600 hover:text-white",
-                `hover:${mood.color} hover:border-transparent hover:${mood.shadow}`
+                  ? `${mood.color} text-white ${mood.shadow} border-transparent scale-105` // Selected: specific neon color, white text, its own shadow, transparent border (bg acts as border)
+                  : "text-muted-foreground hover:text-white", // Not selected: muted text (light gray), hover to white text. Border comes from glassmorphism-card.
+                `hover:${mood.color} hover:border-transparent hover:${mood.shadow}` // Hover: specific neon color, its shadow
               )}
               style={{ animationDelay: `${index * 100}ms` }}
             >
@@ -56,5 +56,5 @@ const PromptCarousel: React.FC<PromptCarouselProps> = ({ selectedMood, onSelectM
   );
 };
 
-export default PromptCarousel; // Renamed export
+export default PromptCarousel;
 
