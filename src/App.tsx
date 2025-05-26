@@ -14,21 +14,20 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <AuthProvider> {/* Wrap BrowserRouter with AuthProvider */}
-        <Toaster />
-        <SonnerToaster /> {/* Ensure Sonner is available for toasts */}
-        <BrowserRouter>
+      <BrowserRouter> {/* BrowserRouter now wraps AuthProvider */}
+        <AuthProvider>
+          <Toaster />
+          <SonnerToaster /> {/* Ensure Sonner is available for toasts */}
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<AuthPage />} /> {/* Add AuthPage route */}
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </BrowserRouter>
-      </AuthProvider>
+        </AuthProvider>
+      </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
 );
 
 export default App;
-
