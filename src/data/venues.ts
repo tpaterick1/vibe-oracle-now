@@ -1,5 +1,4 @@
-
-export type Vibe = "Alive" | "Romantic" | "Peaceful" | "Energetic" | "Chill" | "Mysterious";
+export type Vibe = "Alive" | "Romantic" | "Peaceful" | "Energetic" | "Chill" | "Mysterious" | "Adventurous" | "Intellectual";
 
 export interface Venue {
   id: string;
@@ -20,6 +19,8 @@ export const moods: { name: Vibe; color: string, shadow: string }[] = [
   { name: "Energetic", color: "bg-neon-pink", shadow: "shadow-neon-pink" },
   { name: "Chill", color: "bg-neon-lavender", shadow: "shadow-neon-lavender" },
   { name: "Mysterious", color: "bg-neon-purple", shadow: "shadow-neon-purple" },
+  { name: "Adventurous", color: "bg-neon-orange", shadow: "shadow-neon-orange" },
+  { name: "Intellectual", color: "bg-neon-indigo", shadow: "shadow-neon-indigo" },
 ];
 
 export const venues: Venue[] = [

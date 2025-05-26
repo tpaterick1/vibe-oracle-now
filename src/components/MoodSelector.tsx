@@ -3,7 +3,7 @@ import React from 'react';
 import { moods, Vibe } from '@/data/venues'; // moods is an array of objects { name: Vibe, color: string, shadow: string }
 import { Button } from '@/components/ui/button'; // Using shadcn Button
 import { cn } from '@/lib/utils';
-import { Star, Heart, Circle, ChevronUp, EyeOff, Clock } from 'lucide-react'; // Import icons
+import { Star, Heart, Circle, ChevronUp, EyeOff, Clock, Compass, Lightbulb } from 'lucide-react'; // Import new icons
 
 interface MoodSelectorProps {
   selectedMood: Vibe | null;
@@ -18,8 +18,8 @@ const moodIcons: Record<Vibe, React.ElementType> = {
   "Energetic": ChevronUp,
   "Mysterious": EyeOff,
   "Chill": Clock,
-  // Add other moods if they exist and ensure they have an icon
-  // For this example, we assume all moods in `data/venues.ts` are covered.
+  "Adventurous": Compass, // New icon
+  "Intellectual": Lightbulb, // New icon
 };
 
 

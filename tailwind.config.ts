@@ -55,11 +55,13 @@ export default {
 				},
 				// Custom Neon Colors for Vibes
 				"neon-blue": "#00CFFF", // Alive
-				"neon-pink": "#FF00AA", // Alive
-				"neon-purple": "#A020F0", // Romantic
+				"neon-pink": "#FF00AA", // Energetic (was Alive)
+				"neon-purple": "#A020F0", // Mysterious (was Romantic)
 				"neon-red": "#FF1D58",   // Romantic
 				"neon-teal": "#00FCA8",  // Peaceful
-				"neon-lavender": "#C37EF5",// Peaceful
+				"neon-lavender": "#C37EF5",// Chill (was Peaceful)
+        "neon-orange": "#FF9900", // Adventurous (New)
+        "neon-indigo": "#7F00FF", // Intellectual (New, Violet color)
 				"brand-deep-black": "#0A0A0A",
 				"brand-charcoal": "#1A1A1A",
 			},
@@ -104,6 +106,8 @@ export default {
         'neon-red': '0 0 15px #FF1D58, 0 0 5px #FF1D58',
         'neon-teal': '0 0 15px #00FCA8, 0 0 5px #00FCA8',
         'neon-lavender': '0 0 15px #C37EF5, 0 0 5px #C37EF5',
+        'neon-orange': '0 0 15px #FF9900, 0 0 5px #FF9900', // New
+        'neon-indigo': '0 0 15px #7F00FF, 0 0 5px #7F00FF', // New
       }
 		}
 	},
