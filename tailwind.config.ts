@@ -1,7 +1,8 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
-	darkMode: ["class"],
+	darkMode: ["class"], // Enforcing dark mode via class
 	content: [
 		"./pages/**/*.{ts,tsx}",
 		"./components/**/*.{ts,tsx}",
@@ -22,8 +23,8 @@ export default {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
-				background: 'hsl(var(--background))',
-				foreground: 'hsl(var(--foreground))',
+				background: 'hsl(var(--background))', // Will be dark
+				foreground: 'hsl(var(--foreground))', // Will be light
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))'
@@ -49,19 +50,18 @@ export default {
 					foreground: 'hsl(var(--popover-foreground))'
 				},
 				card: {
-					DEFAULT: 'hsl(var(--card))',
+					DEFAULT: 'hsl(var(--card))', // For glassmorphism
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				sidebar: {
-					DEFAULT: 'hsl(var(--sidebar-background))',
-					foreground: 'hsl(var(--sidebar-foreground))',
-					primary: 'hsl(var(--sidebar-primary))',
-					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-					accent: 'hsl(var(--sidebar-accent))',
-					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-					border: 'hsl(var(--sidebar-border))',
-					ring: 'hsl(var(--sidebar-ring))'
-				}
+				// Custom Neon Colors for Vibes
+				"neon-blue": "#00CFFF", // Alive
+				"neon-pink": "#FF00AA", // Alive
+				"neon-purple": "#A020F0", // Romantic
+				"neon-red": "#FF1D58",   // Romantic
+				"neon-teal": "#00FCA8",  // Peaceful
+				"neon-lavender": "#C37EF5",// Peaceful
+				"brand-deep-black": "#0A0A0A",
+				"brand-charcoal": "#1A1A1A",
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -70,26 +70,41 @@ export default {
 			},
 			keyframes: {
 				'accordion-down': {
-					from: {
-						height: '0'
-					},
-					to: {
-						height: 'var(--radix-accordion-content-height)'
-					}
+					from: { height: '0' },
+					to: { height: 'var(--radix-accordion-content-height)' }
 				},
 				'accordion-up': {
-					from: {
-						height: 'var(--radix-accordion-content-height)'
-					},
-					to: {
-						height: '0'
-					}
-				}
+					from: { height: 'var(--radix-accordion-content-height)' },
+					to: { height: '0' }
+				},
+        'fade-in-up': {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        'glow': {
+          '0%, 100%': { boxShadow: '0 0 5px var(--glow-color), 0 0 10px var(--glow-color)' },
+          '50%': { boxShadow: '0 0 15px var(--glow-color), 0 0 25px var(--glow-color)' },
+        },
+        'subtle-pulse': {
+          '0%, 100%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.03)' },
+        }
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
-			}
+				'accordion-up': 'accordion-up 0.2s ease-out',
+        'fade-in-up': 'fade-in-up 0.6s ease-out forwards',
+        'glow': 'glow 2s ease-in-out infinite',
+        'subtle-pulse': 'subtle-pulse 2.5s ease-in-out infinite',
+			},
+      boxShadow: {
+        'neon-blue': '0 0 15px #00CFFF, 0 0 5px #00CFFF',
+        'neon-pink': '0 0 15px #FF00AA, 0 0 5px #FF00AA',
+        'neon-purple': '0 0 15px #A020F0, 0 0 5px #A020F0',
+        'neon-red': '0 0 15px #FF1D58, 0 0 5px #FF1D58',
+        'neon-teal': '0 0 15px #00FCA8, 0 0 5px #00FCA8',
+        'neon-lavender': '0 0 15px #C37EF5, 0 0 5px #C37EF5',
+      }
 		}
 	},
 	plugins: [require("tailwindcss-animate")],

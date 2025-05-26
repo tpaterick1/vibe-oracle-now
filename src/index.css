@@ -1,68 +1,22 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Default to dark theme values */
+    --background: 222.2 84% 4.9%; /* Dark background */
+    --foreground: 210 40% 98%; /* Light text */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
+    --card: 222.2 84% 7%; /* Darker card for glassmorphism base */
     --card-foreground: 210 40% 98%;
 
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 210 40% 98%; /* Light primary for dark theme */
+    --primary-foreground: 222.2 47.4% 11.2%; /* Dark text on light primary */
 
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -76,26 +30,65 @@
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
+    --border: 217.2 32.6% 27.5%; /* Slightly lighter border for dark theme */
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --radius: 0.75rem; /* Slightly larger radius for modern feel */
   }
+
+  /* Ensure html has dark class if you want to toggle light/dark later */
+  /* For now, we're hardcoding dark theme essentially via root variables */
 }
 
 @layer base {
   * {
     @apply border-border;
   }
-
   body {
-    @apply bg-background text-foreground;
+    @apply bg-brand-deep-black text-foreground; /* Use custom deep black */
+    font-family: 'Poppins', sans-serif; /* Adding Poppins font */
+  }
+  /* Add Poppins font import in index.html */
+}
+
+@layer components {
+  .glassmorphism-card {
+    @apply bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-20;
+    background-color: rgba(26, 26, 26, 0.5); /* charcoal with opacity */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .neon-text-blue {
+    color: #00CFFF;
+    text-shadow: 0 0 5px #00CFFF, 0 0 10px #00CFFF;
+  }
+  .neon-text-pink {
+    color: #FF00AA;
+    text-shadow: 0 0 5px #FF00AA, 0 0 10px #FF00AA;
+  }
+  .neon-text-purple {
+    color: #A020F0;
+    text-shadow: 0 0 5px #A020F0, 0 0 10px #A020F0;
+  }
+   .neon-text-red {
+    color: #FF1D58;
+    text-shadow: 0 0 5px #FF1D58, 0 0 10px #FF1D58;
+  }
+  .neon-text-teal {
+    color: #00FCA8;
+    text-shadow: 0 0 5px #00FCA8, 0 0 10px #00FCA8;
+  }
+  .neon-text-lavender {
+    color: #C37EF5;
+    text-shadow: 0 0 5px #C37EF5, 0 0 10px #C37EF5;
+  }
+}
+
+@layer utilities {
+  .animation-delay-200 {
+    animation-delay: 0.2s;
+  }
+  .animation-delay-400 {
+    animation-delay: 0.4s;
   }
 }
