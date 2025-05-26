@@ -126,33 +126,9 @@ const Index = () => {
         {/* PromptCarousel */}
         <PromptCarousel selectedMood={selectedMood} onSelectMood={handleSelectMood} />
         
-        {/* Combined Map and Webcam Section */}
-        <div className="flex flex-col md:flex-row gap-8 my-8 md:my-12">
-          {/* Map Section (Left Side on md screens) */}
-          <div className="md:w-1/2 flex flex-col">
-             <h3 className="text-3xl font-semibold mb-6 text-center md:text-left neon-text-teal animate-fade-in-up" style={{animationDelay: '0.4s'}}>
-                Find Your Vibe
-              </h3>
-            {allVenuesQuery.isLoading ? (
-              <div className="flex justify-center items-center h-64 bg-brand-charcoal rounded-lg">
-                <Loader2 className="h-12 w-12 neon-text-teal animate-spin" />
-              </div>
-            ) : allVenuesQuery.isError ? (
-              <div className="flex justify-center items-center h-64 bg-brand-charcoal rounded-lg">
-                <p className="text-neon-red">Error loading map data.</p>
-              </div>
-            ) : (
-              <VenueMap 
-                venues={venuesForMap} 
-                apiKey={GOOGLE_MAPS_API_KEY}
-                defaultCenter={ST_AUGUSTINE_COORDS}
-                defaultZoom={13}
-              />
-            )}
-          </div>
-
-          {/* Webcam Lightbox Trigger Section (Right Side on md screens) */}
-          <div className="md:w-1/2 flex flex-col items-center md:items-start animate-fade-in-up" style={{animationDelay: '0.6s'}}>
+        {/* Webcam Lightbox Trigger Section - Adjusted to be standalone */}
+        <div className="my-8 md:my-12 flex justify-center">
+          <div className="w-full md:w-3/4 lg:w-2/3 flex flex-col items-center md:items-start animate-fade-in-up" style={{animationDelay: '0.6s'}}>
             <h3 className="text-3xl font-semibold mb-6 text-center md:text-left neon-text-lavender">Share Your Vibe!</h3>
             <p className="text-lg text-gray-400 mb-6 text-center md:text-left">
               Capture a selfie to personalize your night out recommendations.
@@ -241,7 +217,6 @@ const Index = () => {
             )}
           </div>
         )}
-
         {allVenuesQuery.isSuccess && selectedMood && filteredVenues.length === 0 && (
            <div className="text-center py-12 animate-fade-in-up" style={{animationDelay: '1s'}}>
             <Info className="mx-auto h-8 w-8 md:h-12 md:w-12 neon-text-teal mb-4" />
@@ -251,6 +226,29 @@ const Index = () => {
         )}
         
         <NightPlanGenerator />
+
+        {/* Map Section - Moved to bottom, centered and expanded */}
+        <div className="my-12 md:my-16 w-full">
+           <h3 className="text-3xl font-semibold mb-6 text-center neon-text-teal animate-fade-in-up" style={{animationDelay: '0.4s'}}>
+              Find Your Vibe on the Map
+            </h3>
+          {allVenuesQuery.isLoading ? (
+            <div className="flex justify-center items-center h-64 bg-brand-charcoal rounded-lg">
+              <Loader2 className="h-12 w-12 neon-text-teal animate-spin" />
+            </div>
+          ) : allVenuesQuery.isError ? (
+            <div className="flex justify-center items-center h-64 bg-brand-charcoal rounded-lg">
+              <p className="text-neon-red">Error loading map data.</p>
+            </div>
+          ) : (
+            <VenueMap 
+              venues={venuesForMap} 
+              apiKey={GOOGLE_MAPS_API_KEY}
+              defaultCenter={ST_AUGUSTINE_COORDS}
+              defaultZoom={13}
+            />
+          )}
+        </div>
 
       </div>
       <Footer />
