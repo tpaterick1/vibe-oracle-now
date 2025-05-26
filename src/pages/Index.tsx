@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import Header from '@/components/layout/Header';
-import MoodSelector from '@/components/MoodSelector';
+import PromptCarousel from '@/components/PromptCarousel';
 import VenueCard from '@/components/VenueCard';
 import { venues as allVenues, Venue, Vibe } from '@/data/venues';
 import Footer from '@/components/layout/Footer';
@@ -82,8 +82,8 @@ const Index = () => {
           )}
         </div>
 
-        {/* MoodSelector */}
-        <MoodSelector selectedMood={selectedMood} onSelectMood={handleSelectMood} />
+        {/* PromptCarousel */}
+        <PromptCarousel selectedMood={selectedMood} onSelectMood={handleSelectMood} />
         
         {/* Combined Map and Webcam Section */}
         <div className="flex flex-col md:flex-row gap-8 my-8 md:my-12">

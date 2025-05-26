@@ -1,16 +1,15 @@
 
 import React from 'react';
-import { moods, Vibe } from '@/data/venues'; // moods is an array of objects { name: Vibe, color: string, shadow: string }
-import { Button } from '@/components/ui/button'; // Using shadcn Button
+import { moods, Vibe } from '@/data/venues';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { Star, Heart, Circle, ChevronUp, EyeOff, Clock, Compass, Lightbulb } from 'lucide-react'; // Import new icons
+import { Star, Heart, Circle, ChevronUp, EyeOff, Clock, Compass, Lightbulb } from 'lucide-react';
 
-interface MoodSelectorProps {
-  selectedMood: Vibe | null;
-  onSelectMood: (mood: Vibe) => void;
+interface PromptCarouselProps { // Renamed from MoodSelectorProps
+  selectedMood: Vibe | null; // Name kept for now, represents selected prompt/vibe
+  onSelectMood: (mood: Vibe) => void; // Name kept for now
 }
 
-// Define a mapping for mood names to icons
 const moodIcons: Record<Vibe, React.ElementType> = {
   "Alive": Star,
   "Romantic": Heart,
@@ -18,16 +17,16 @@ const moodIcons: Record<Vibe, React.ElementType> = {
   "Energetic": ChevronUp,
   "Mysterious": EyeOff,
   "Chill": Clock,
-  "Adventurous": Compass, // New icon
-  "Intellectual": Lightbulb, // New icon
+  "Adventurous": Compass,
+  "Intellectual": Lightbulb,
 };
 
-
-const MoodSelector: React.FC<MoodSelectorProps> = ({ selectedMood, onSelectMood }) => {
+// Renamed component from MoodSelector to PromptCarousel
+const PromptCarousel: React.FC<PromptCarouselProps> = ({ selectedMood, onSelectMood }) => {
   return (
     <div className="my-8 animate-fade-in-up animation-delay-400">
       <h2 className="text-3xl font-bold mb-8 text-center neon-text-lavender tracking-tight animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
-        How are you feeling tonight?
+        What's the vibe for tonight? {/* Updated title */}
       </h2>
       <div className="flex flex-wrap justify-center gap-3 md:gap-4 px-4">
         {moods.map((mood, index) => {
@@ -47,7 +46,7 @@ const MoodSelector: React.FC<MoodSelectorProps> = ({ selectedMood, onSelectMood 
               )}
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              {IconComponent && <IconComponent className="mr-2 h-4 w-4 md:h-5 md:w-5" />} {/* Adjusted icon size */}
+              {IconComponent && <IconComponent className="mr-2 h-4 w-4 md:h-5 md:w-5" />}
               {mood.name}
             </Button>
           );
@@ -57,4 +56,5 @@ const MoodSelector: React.FC<MoodSelectorProps> = ({ selectedMood, onSelectMood 
   );
 };
 
-export default MoodSelector;
+export default PromptCarousel; // Renamed export
+
