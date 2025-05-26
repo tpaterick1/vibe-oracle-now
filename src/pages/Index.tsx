@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import Header from '@/components/layout/Header';
 import MoodSelector from '@/components/MoodSelector';
@@ -35,13 +36,31 @@ const Index = () => {
   }, [selectedMood]);
 
   const venuesForMap = useMemo(() => {
-    return filteredVenues;
-  }, [filteredVenues]);
+    // If a mood is selected, show only filtered venues on the map.
+    // If no mood is selected (showing "Tonight's Highlights"), show all venues or a default set.
+    // For simplicity, let's show all venues if no mood is selected,
+    // or you could use the same logic as filteredVenues for "Tonight's Highlights".
+    // return selectedMood ? filteredVenues : allVenues; 
+    return filteredVenues.length > 0 ? filteredVenues : allVenues.slice(0,5); // Show first 5 if no selection or no match
+  }, [selectedMood, filteredVenues]);
 
   return (
     <div className="min-h-screen bg-brand-deep-black text-foreground p-4 md:p-8 selection:bg-neon-pink selection:text-white">
       <div className="container mx-auto">
         <Header />
+
+        {/* Map Section - MOVED HERE */}
+        <div className="mt-8 mb-12"> {/* Adjusted margins */}
+           <h3 className="text-3xl font-semibold mb-8 text-center neon-text-teal animate-fade-in-up" style={{animationDelay: '0.4s'}}> {/* Adjusted animation delay */}
+              Find Your Vibe on the Map
+            </h3>
+          <VenueMap 
+            venues={venuesForMap} 
+            apiKey={GOOGLE_MAPS_API_KEY}
+            defaultCenter={ST_AUGUSTINE_COORDS}
+            defaultZoom={13} // Slightly more zoomed out to see more context initially
+          />
+        </div>
 
         {/* Auth Status and Actions */}
         <div className="flex justify-end items-center mb-4 space-x-4">
@@ -114,17 +133,7 @@ const Index = () => {
           </div>
         )}
 
-        <div className="mt-12">
-           <h3 className="text-3xl font-semibold mb-8 text-center neon-text-teal animate-fade-in-up" style={{animationDelay: '1s'}}>
-              Find them on the Map
-            </h3>
-          <VenueMap 
-            venues={venuesForMap} 
-            apiKey={GOOGLE_MAPS_API_KEY}
-            defaultCenter={ST_AUGUSTINE_COORDS}
-            defaultZoom={14} 
-          />
-        </div>
+        {/* VenueMap was here, now removed */}
 
         <NightPlanGenerator />
 
@@ -135,3 +144,4 @@ const Index = () => {
 };
 
 export default Index;
+
