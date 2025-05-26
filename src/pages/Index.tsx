@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import Header from '@/components/layout/Header';
 import MoodSelector from '@/components/MoodSelector';
@@ -10,7 +9,7 @@ import VenueMap from '@/components/VenueMap'; // Import the map component
 
 // IMPORTANT: Replace "YOUR_GOOGLE_MAPS_API_KEY" with your actual Google Maps API key.
 // For production, consider more secure ways to handle API keys.
-const GOOGLE_MAPS_API_KEY = "YOUR_GOOGLE_MAPS_API_KEY"; 
+const GOOGLE_MAPS_API_KEY = "AIzaSyD-TDEZAjo3rzWroKTxf-StVJbo64DjvPk"; 
 
 // Default center for St. Augustine, FL
 const ST_AUGUSTINE_COORDS = { lat: 29.894695, lng: -81.314493 };
