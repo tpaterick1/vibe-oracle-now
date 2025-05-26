@@ -30,12 +30,11 @@ const VenueCard: React.FC<VenueCardProps> = ({ venue, index }) => {
             <span 
               key={tag} 
               className={cn(
-                "inline-block bg-opacity-20 rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2",
-                venue.textColorClass.startsWith("neon-text-blue") || venue.textColorClass.startsWith("neon-text-pink") ? "bg-neon-blue text-white" :
-                venue.textColorClass.startsWith("neon-text-red") || venue.textColorClass.startsWith("neon-text-purple") ? "bg-neon-red text-white" :
-                "bg-neon-teal text-gray-800" // Default for peaceful etc.
+                "inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2 text-white",
+                // Example: if venue.neonColorClass is 'border-neon-blue', this becomes 'bg-neon-blue/30'
+                // Using Tailwind arbitrary value for background color with opacity
+                `${venue.neonColorClass.replace('border-', 'bg-')}/30` 
               )}
-              style={{backgroundColor: venue.neonColorClass.replace('border-', 'var(--tw-bg-')}} // Approximation for tag bg
             >
               #{tag}
             </span>

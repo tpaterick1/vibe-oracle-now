@@ -12,7 +12,7 @@ interface MoodSelectorProps {
 const MoodSelector: React.FC<MoodSelectorProps> = ({ selectedMood, onSelectMood }) => {
   return (
     <div className="my-8 animate-fade-in-up animation-delay-400">
-      <h2 className="text-2xl font-semibold mb-6 text-center text-gray-300">
+      <h2 className="text-3xl font-bold mb-8 text-center neon-text-lavender tracking-tight animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
         How are you feeling tonight?
       </h2>
       <div className="flex flex-wrap justify-center gap-3 md:gap-4 px-4">
@@ -29,7 +29,7 @@ const MoodSelector: React.FC<MoodSelectorProps> = ({ selectedMood, onSelectMood 
                 : "text-gray-300 border-gray-600 hover:text-white",
               `hover:${mood.color} hover:border-transparent hover:${mood.shadow}`
             )}
-            style={{ animationDelay: `${index * 100}ms` }}
+            style={{ animationDelay: `${index * 100}ms` }} // This animation delay is for the button's appearance within the already animated div
           >
             {mood.name}
           </Button>

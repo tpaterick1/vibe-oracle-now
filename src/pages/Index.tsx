@@ -41,8 +41,8 @@ const Index = () => {
 
         {selectedMood && filteredVenues.length === 0 && (
            <div className="text-center py-12 animate-fade-in-up" style={{animationDelay: '1s'}}>
-            <p className="text-2xl text-gray-400">No venues match the "{selectedMood}" vibe right now.</p>
-            <p className="text-lg text-gray-500 mt-2">Try another vibe or check back later!</p>
+            <p className="text-2xl neon-text-teal">No venues match the "{selectedMood}" vibe right now.</p>
+            <p className="text-lg text-gray-400 mt-2">Try another vibe or check back later!</p>
           </div>
         )}
       </div>

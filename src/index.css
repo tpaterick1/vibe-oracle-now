@@ -46,7 +46,10 @@
     @apply border-border;
   }
   body {
-    @apply bg-brand-deep-black text-foreground; /* Use custom deep black */
+    @apply text-foreground;
+    /* Using a subtle gradient from deep black to charcoal for more depth */
+    background: linear-gradient(180deg, theme('colors.brand-deep-black') 0%, theme('colors.brand-charcoal') 100%);
+    min-height: 100vh; /* Ensures gradient covers the full viewport height */
     font-family: 'Poppins', sans-serif; /* Adding Poppins font */
   }
   /* Add Poppins font import in index.html */
@@ -91,4 +94,5 @@
   .animation-delay-400 {
     animation-delay: 0.4s;
   }
+  /* You can add more specific animation delay utilities if needed */
 }

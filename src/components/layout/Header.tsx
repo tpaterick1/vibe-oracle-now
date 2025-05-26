@@ -9,7 +9,7 @@ const Header = () => {
         <span className="neon-text-pink">Augustine</span>
         <span className="neon-text-teal">Tonight</span>
       </h1>
-      <p className="mt-3 text-lg text-gray-400 animate-fade-in-up animation-delay-200">
+      <p className="mt-4 text-xl text-gray-300 tracking-wide animate-fade-in-up animation-delay-200">
         No scrolls, just vibes.
       </p>
     </header>
