@@ -4,6 +4,7 @@ import Header from '@/components/layout/Header';
 import MoodSelector from '@/components/MoodSelector';
 import VenueCard from '@/components/VenueCard';
 import { venues as allVenues, Venue, Vibe } from '@/data/venues';
+import Footer from '@/components/layout/Footer'; // Import the new Footer component
 
 const Index = () => {
   const [selectedMood, setSelectedMood] = useState<Vibe | null>(null);
@@ -46,10 +47,7 @@ const Index = () => {
           </div>
         )}
       </div>
-      <footer className="text-center py-8 mt-12 border-t border-gray-800">
-        <p className="text-gray-500">&copy; {new Date().getFullYear()} StAugustineTonight. All rights reserved.</p>
-        <p className="text-sm text-gray-600 mt-1">Find your vibe, discover your night.</p>
-      </footer>
+      <Footer /> {/* Use the new Footer component here */}
     </div>
   );
 };
