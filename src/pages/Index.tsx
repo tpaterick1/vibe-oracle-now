@@ -105,6 +105,9 @@ const Index = () => {
           )}
         </div>
 
+        {/* NightPlanGenerator moved to the top */}
+        <NightPlanGenerator />
+
         {/* PromptCarousel */}
         <PromptCarousel selectedMood={selectedMood} onSelectMood={handleSelectMood} />
         
@@ -164,8 +167,6 @@ const Index = () => {
           </div>
         )}
         
-        <NightPlanGenerator />
-
         {/* Map Section */}
         <div className="my-12 md:my-16 w-full">
            <h3 className="text-3xl font-semibold mb-6 text-center neon-text-teal animate-fade-in-up" style={{animationDelay: '0.4s'}}>
