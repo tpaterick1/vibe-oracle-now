@@ -1,1 +1,6 @@
+
 project_id = "udzdnevvfcrieoytzrzp"
+
+[functions.generate-night-plan-openai]
+# If your function needs to be called from the browser without auth, set verify_jwt to false
+# verify_jwt = false
