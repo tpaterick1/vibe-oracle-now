@@ -1,11 +1,10 @@
-
 import React, { useState, useMemo } from 'react';
 import Header from '@/components/layout/Header';
 import MoodSelector from '@/components/MoodSelector';
 import VenueCard from '@/components/VenueCard';
 import { venues as allVenues, Venue, Vibe } from '@/data/venues';
 import Footer from '@/components/layout/Footer';
-import { Info, LogIn, LogOut, Video as VideoIcon } from 'lucide-react';
+import { Info, LogIn, LogOut, Video as VideoIcon, Circle } from 'lucide-react';
 import VenueMap from '@/components/VenueMap';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import NightPlanGenerator from '@/components/NightPlanGenerator';
@@ -133,8 +132,16 @@ const Index = () => {
         {/* Filtered Venues Section */}
         {filteredVenues.length > 0 && (
           <div className="mt-12 mb-8">
-            <h3 className="text-3xl font-semibold mb-8 text-center neon-text-pink animate-fade-in-up" style={{animationDelay: '0.8s'}}>
-              {selectedMood ? `Vibes for: ${selectedMood}` : "Tonight's Highlights"}
+            <h3 
+              className="text-3xl font-semibold mb-8 text-center neon-text-pink animate-fade-in-up flex items-center justify-center" 
+              style={{animationDelay: '0.8s'}}
+            >
+              {selectedMood ? `Vibes for: ${selectedMood}` : (
+                <>
+                  <span>Tonight's Highlights</span>
+                  <Circle className="ml-3 h-5 w-5 animate-spin text-neon-pink" />
+                </>
+              )}
             </h3>
 
             {!selectedMood ? (
