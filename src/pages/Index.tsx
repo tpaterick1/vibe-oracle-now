@@ -4,10 +4,13 @@ import MoodSelector from '@/components/MoodSelector';
 import VenueCard from '@/components/VenueCard';
 import { venues as allVenues, Venue, Vibe } from '@/data/venues';
 import Footer from '@/components/layout/Footer';
-import { Info } from 'lucide-react';
+import { Info, LogIn, LogOut } from 'lucide-react';
 import VenueMap from '@/components/VenueMap';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import NightPlanGenerator from '@/components/NightPlanGenerator';
+import { useAuth } from '@/hooks/useAuth';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 // IMPORTANT: Replace "YOUR_GOOGLE_MAPS_API_KEY" with your actual Google Maps API key.
 // For production, consider more secure ways to handle API keys.
@@ -18,6 +21,7 @@ const ST_AUGUSTINE_COORDS = { lat: 29.894695, lng: -81.314493 };
 
 const Index = () => {
   const [selectedMood, setSelectedMood] = useState<Vibe | null>(null);
+  const { user, logout, isLoading: authLoading } = useAuth();
 
   const handleSelectMood = (mood: Vibe) => {
     setSelectedMood(prevMood => prevMood === mood ? null : mood);
@@ -38,6 +42,27 @@ const Index = () => {
     <div className="min-h-screen bg-brand-deep-black text-foreground p-4 md:p-8 selection:bg-neon-pink selection:text-white">
       <div className="container mx-auto">
         <Header />
+
+        {/* Auth Status and Actions */}
+        <div className="flex justify-end items-center mb-4 space-x-4">
+          {authLoading ? (
+            <span className="text-gray-400">Loading user...</span>
+          ) : user ? (
+            <>
+              <span className="text-neon-teal hidden sm:inline">Welcome, {user.email}!</span>
+              <Button onClick={logout} variant="outline" className="border-neon-pink text-neon-pink hover:bg-neon-pink/20 hover:text-white">
+                <LogOut className="mr-2 h-4 w-4" /> Logout
+              </Button>
+            </>
+          ) : (
+            <Link to="/auth">
+              <Button variant="outline" className="border-neon-teal text-neon-teal hover:bg-neon-teal/20 hover:text-white">
+                <LogIn className="mr-2 h-4 w-4" /> Login / Sign Up
+              </Button>
+            </Link>
+          )}
+        </div>
+
         <MoodSelector selectedMood={selectedMood} onSelectMood={handleSelectMood} />
         
         {filteredVenues.length > 0 && (
