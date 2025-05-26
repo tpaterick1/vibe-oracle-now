@@ -19,7 +19,6 @@ const moodIcons: Record<Vibe, React.ElementType> = {
   "Mysterious": EyeOff,
   "Chill": Clock,
   // Add other moods if they exist and ensure they have an icon
-  // For any moods not explicitly listed, we can provide a default or handle it.
   // For this example, we assume all moods in `data/venues.ts` are covered.
 };
 
@@ -48,7 +47,7 @@ const MoodSelector: React.FC<MoodSelectorProps> = ({ selectedMood, onSelectMood 
               )}
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              {IconComponent && <IconComponent className="mr-2 h-5 w-5" />} {/* Added icon here */}
+              {IconComponent && <IconComponent className="mr-2 h-4 w-4 md:h-5 md:w-5" />} {/* Adjusted icon size */}
               {mood.name}
             </Button>
           );

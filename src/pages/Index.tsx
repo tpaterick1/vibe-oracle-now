@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import Header from '@/components/layout/Header';
 import MoodSelector from '@/components/MoodSelector';
@@ -42,7 +43,7 @@ const Index = () => {
 
         {selectedMood && filteredVenues.length === 0 && (
            <div className="text-center py-12 animate-fade-in-up" style={{animationDelay: '1s'}}>
-            <Info className="mx-auto h-12 w-12 neon-text-teal mb-4" />
+            <Info className="mx-auto h-8 w-8 md:h-12 md:w-12 neon-text-teal mb-4" /> {/* Adjusted icon size */}
             <p className="text-2xl neon-text-teal">No venues match the "{selectedMood}" vibe right now.</p>
             <p className="text-lg text-gray-400 mt-2">Try another vibe or check back later!</p>
           </div>
