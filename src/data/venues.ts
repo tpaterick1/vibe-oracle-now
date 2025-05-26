@@ -1,15 +1,18 @@
+
 export type Vibe = "Alive" | "Romantic" | "Peaceful" | "Energetic" | "Chill" | "Mysterious" | "Adventurous" | "Intellectual";
 
 export interface Venue {
   id: string;
   name: string;
-  vibeTags: Vibe[];
-  story: string;
-  image: string;
-  neonColorClass: string;
-  textColorClass: string;
-  lat: number; // Added latitude
-  lng: number; // Added longitude
+  vibeTags: Vibe[]; // This will be mapped from vibe_tags
+  story: string | null;
+  image: string | null;
+  neonColorClass: string | null; // This will be mapped from neon_color_class
+  textColorClass: string | null; // This will be mapped from text_color_class
+  lat: number;
+  lng: number;
+  created_at: string;
+  updated_at: string;
 }
 
 export const moods: { name: Vibe; color: string, shadow: string }[] = [
@@ -23,71 +26,4 @@ export const moods: { name: Vibe; color: string, shadow: string }[] = [
   { name: "Intellectual", color: "bg-neon-indigo", shadow: "shadow-neon-indigo" },
 ];
 
-export const venues: Venue[] = [
-  {
-    id: "1",
-    name: "The Electric Eel Lounge",
-    vibeTags: ["Alive", "Energetic"],
-    story: "Pulse-pounding beats and vibrant energy. Lose yourself in the rhythm.",
-    image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Y29uY2VydCUyMG5pZ2h0Y2x1YnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
-    neonColorClass: "border-neon-blue",
-    textColorClass: "neon-text-blue",
-    lat: 29.8947, // Placeholder coordinates
-    lng: -81.3145, // Placeholder coordinates
-  },
-  {
-    id: "2",
-    name: "Velvet Kiss Speakeasy",
-    vibeTags: ["Romantic", "Mysterious"],
-    story: "Intimate corners and whispered secrets. Perfect for a night of connection.",
-    image: "https://images.unsplash.com/photo-1529333166437-775054dd585D?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHNwZWFrZWFzeSUyMGJhcnhlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
-    neonColorClass: "border-neon-red",
-    textColorClass: "neon-text-red",
-    lat: 29.8930, // Placeholder coordinates
-    lng: -81.3120, // Placeholder coordinates
-  },
-  {
-    id: "3",
-    name: "Zenith Rooftop Garden",
-    vibeTags: ["Peaceful", "Chill"],
-    story: "Breathtaking city views under a canopy of stars. Find your calm.",
-    image: "https://images.unsplash.com/photo-1588000459939-2000075090e0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cm9vZnRvcCUyMGJhcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
-    neonColorClass: "border-neon-teal",
-    textColorClass: "neon-text-teal",
-    lat: 29.8965, // Placeholder coordinates
-    lng: -81.3155, // Placeholder coordinates
-  },
-  {
-    id: "4",
-    name: "The Neon Arcade",
-    vibeTags: ["Alive", "Energetic"],
-    story: "Retro games and futuristic lights. A blast from the past, powered by now.",
-    image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8YXJjYWRlfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
-    neonColorClass: "border-neon-pink",
-    textColorClass: "neon-text-pink",
-    lat: 29.8922, // Placeholder coordinates
-    lng: -81.3101, // Placeholder coordinates
-  },
-  {
-    id: "5",
-    name: "Moonshadow Cafe",
-    vibeTags: ["Peaceful", "Chill", "Romantic"],
-    story: "Soft jazz, warm drinks, and quiet conversations. Your late-night haven.",
-    image: "https://images.unsplash.com/photo-1497515114629-f71d768fd07c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGNhZmUlMjBhdCUyMG5pZ2h0fGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
-    neonColorClass: "border-neon-lavender",
-    textColorClass: "neon-text-lavender",
-    lat: 29.8978, // Placeholder coordinates
-    lng: -81.3160, // Placeholder coordinates
-  },
-  {
-    id: "6",
-    name: "Oracle's Den",
-    vibeTags: ["Mysterious", "Chill"],
-    story: "Uncover hidden gems and eclectic cocktails. What will you discover?",
-    image: "https://images.unsplash.com/photo-1543007174-639a10a893e3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8ZGFyayUyMGJhciUyMGludGVyaW9yfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
-    neonColorClass: "border-neon-purple",
-    textColorClass: "neon-text-purple",
-    lat: 29.8900, // Placeholder coordinates
-    lng: -81.3090, // Placeholder coordinates
-  },
-];
+// The 'venues' array is removed from here as data will be fetched from Supabase.

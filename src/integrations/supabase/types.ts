@@ -9,7 +9,48 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      venues: {
+        Row: {
+          created_at: string
+          id: string
+          image: string | null
+          lat: number
+          lng: number
+          name: string
+          neon_color_class: string | null
+          story: string | null
+          text_color_class: string | null
+          updated_at: string
+          vibe_tags: string[]
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          image?: string | null
+          lat: number
+          lng: number
+          name: string
+          neon_color_class?: string | null
+          story?: string | null
+          text_color_class?: string | null
+          updated_at?: string
+          vibe_tags: string[]
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image?: string | null
+          lat?: number
+          lng?: number
+          name?: string
+          neon_color_class?: string | null
+          story?: string | null
+          text_color_class?: string | null
+          updated_at?: string
+          vibe_tags?: string[]
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
