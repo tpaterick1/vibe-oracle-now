@@ -1,11 +1,12 @@
+
 import React from 'react';
 import { 
   Star, Heart, Circle, ChevronUp, EyeOff, Clock, Compass, Lightbulb, PartyPopper, Music2, Utensils,
-  Activity, // New
-  Beach,    // New
-  Beer as Bar,       // Using Beer for Bar vibe, aliased as Bar
-  CookingPot as Restaurant, // Using CookingPot for Restaurant, aliased
-  Puzzle as Hobby    // New
+  Activity,
+  Sun as BeachIcon, // Changed Beach to Sun and aliased as BeachIcon
+  Beer as Bar,
+  CookingPot as Restaurant,
+  Puzzle as Hobby
 } from 'lucide-react';
 import { Vibe } from '@/data/venues';
 
@@ -24,7 +25,7 @@ export const moodIcons: Record<Vibe, React.ElementType> = {
   // New Icons
   "Bar": Bar,
   "Restaurant": Restaurant,
-  "Beach": Beach,
+  "Beach": BeachIcon, // Using the aliased Sun icon
   "Hobby": Hobby,
   "Activity": Activity,
 };
@@ -47,3 +48,4 @@ export const busynessEmojis: Record<BusynessLevel, string> = {
   "busy": "북적", // 🔥 or 🎉
   "on_fire": "핫플", // 🚀 or 🤩
 };
+
