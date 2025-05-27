@@ -59,7 +59,7 @@ const VenueMap: React.FC<VenueMapProps> = ({ venues, apiKey, defaultCenter, defa
   }
 
   return (
-    <div className="my-8 h-[400px] md:h-[500px] w-full rounded-lg overflow-hidden shadow-xl glassmorphism-card border-neon-teal">
+    <div className="my-8 h-[400px] md:h-[500px] w-full rounded-lg overflow-hidden shadow-xl glassmorphism-card border-neon-purple">
       <APIProvider apiKey={apiKey}>
         <Map
           defaultCenter={defaultCenter}
