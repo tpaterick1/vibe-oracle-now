@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea"; // Still used as a fallback
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Utensils, MapPin, Star, type LucideIcon } from 'lucide-react'; // Added icons
+import { Loader2, Utensils, MapPin, Star, Lightbulb, Compass, type LucideIcon } from 'lucide-react'; // Added Lightbulb, Compass
 import { supabase } from '@/integrations/supabase/client';
 
 // Interface for parsed plan items
@@ -37,7 +37,7 @@ const parsePlanFromMarkdown = (markdownText: string): ParsedPlanData => {
   
   const itemTitleRegex = /^\s*\*\*(?:\d+\.\s*)?(.+?)\*\*\s*$/; // Matches **1. Title** or **Title**
   const tipsHeaderRegex = /^###\s*Budget-Friendly Tips:/i;
-  const mainPlanTitleRegex = /^###\s*(Night Out Plan.*|Your AI-Crafted Plan.*)/i; // Catches common main titles
+  const mainPlanTitleRegex = /^###\s*(Night Out Plan.*|Your AI-Crafted Plan.*|Your Nightly Quest.*)/i; // Catches common main titles, added "Your Nightly Quest"
 
   let currentRawItemTitle = "";
   let accumulatedTextForCurrentItem = "";
@@ -68,11 +68,14 @@ const parsePlanFromMarkdown = (markdownText: string): ParsedPlanData => {
     if (lowerTitle.includes('dinner') || lowerTitle.includes('food') || lowerTitle.includes('eat') || lowerTitle.includes('restaurant') || lowerTitle.includes('cuisine')) {
       return Utensils;
     }
-    if (lowerTitle.includes('tour') || lowerTitle.includes('visit') || lowerTitle.includes('explore') || lowerTitle.includes('ghost') || lowerTitle.includes('walk') || lowerTitle.includes('history')) {
+    if (lowerTitle.includes('tour') || lowerTitle.includes('visit') || lowerTitle.includes('explore') || lowerTitle.includes('ghost') || lowerTitle.includes('walk') || lowerTitle.includes('history') || lowerTitle.includes('sightseeing')) {
       return MapPin;
     }
-    if (lowerTitle.includes('drinks') || lowerTitle.includes('bar') || lowerTitle.includes('lounge') || lowerTitle.includes('cocktails') || lowerTitle.includes('pub')) {
-      return Star; // Using Star as a generic icon for drinks/nightlife spots
+    if (lowerTitle.includes('drinks') || lowerTitle.includes('bar') || lowerTitle.includes('lounge') || lowerTitle.includes('cocktails') || lowerTitle.includes('pub') || lowerTitle.includes('music') || lowerTitle.includes('live band')) {
+      return Star; 
+    }
+    if (lowerTitle.includes('activity') || lowerTitle.includes('show') || lowerTitle.includes('event')) {
+        return Compass;
     }
     return Star; // Default icon
   };
@@ -115,7 +118,7 @@ const parsePlanFromMarkdown = (markdownText: string): ParsedPlanData => {
             accumulatedTextForCurrentItem = "";
         }
         capturingTips = true;
-        tipsSection += line + "\n";
+        tipsSection += line + "\n"; // Keep the header for now, will be styled separately
         planStarted = true;
         continue;
     }
@@ -125,11 +128,10 @@ const parsePlanFromMarkdown = (markdownText: string): ParsedPlanData => {
     } else if (capturingTips) {
         tipsSection += line + "\n";
     } else if (planStarted && line.trim()) { 
-        // If plan has started (either items, tips, or main title seen) and not part of current item/tips
         outroText += line + "\n";
-    } else if (!planStarted && line.trim().toLowerCase().startsWith("enjoy")) { // Catch common outro start
+    } else if (!planStarted && line.trim().toLowerCase().startsWith("enjoy")) { 
         outroText += line + "\n";
-        planStarted = true; // Assume plan is starting if we see an outro like this early
+        planStarted = true; 
     }
   }
   
@@ -145,15 +147,14 @@ const parsePlanFromMarkdown = (markdownText: string): ParsedPlanData => {
   tipsSection = tipsSection.trim();
   outroText = outroText.trim();
 
-  // If mainTitle is still default but there's an intro line in `outroText`, use that for mainTitle.
-  // This happens if the first `### Title` wasn't matched by `mainPlanTitleRegex`.
   if (mainTitle === "Your AI-Crafted Plan" && items.length > 0 && outroText) {
       const potentialTitle = outroText.split('\n')[0];
-      if (potentialTitle.length < 80 && !potentialTitle.toLowerCase().startsWith("enjoy")) { // Heuristic for a title
+      if (potentialTitle.length < 80 && !potentialTitle.toLowerCase().startsWith("enjoy")) { 
           mainTitle = potentialTitle;
           outroText = outroText.substring(outroText.indexOf('\n') + 1).trim();
       }
   }
+  if (mainTitle === "Your AI-Crafted Plan") mainTitle = "Your Nightly Quest!";
 
 
   return { items, mainTitle, tipsSection, outroText };
@@ -173,7 +174,7 @@ const NightPlanGenerator: React.FC = () => {
     setIsLoading(true);
     setError(null);
     setGeneratedPlan('');
-    setParsedPlanData(null); // Reset parsed data
+    setParsedPlanData(null); 
 
     try {
       console.log("Invoking Supabase Edge Function 'generate-night-plan-openai'...");
@@ -201,7 +202,7 @@ const NightPlanGenerator: React.FC = () => {
     } catch (err: any) {
       console.error("Error generating plan:", err);
       setError(err.message || "Failed to generate plan. Check console for details.");
-      setParsedPlanData(null); // Clear parsed data on error
+      setParsedPlanData(null); 
     } finally {
       setIsLoading(false);
     }
@@ -262,53 +263,86 @@ const NightPlanGenerator: React.FC = () => {
               Generating...
             </>
           ) : (
-            "Generate Plan with OpenAI"
+            "Craft My Quest!"
           )}
         </Button>
         {error && <p className="text-neon-red text-center mt-4">{error}</p>}
       </CardContent>
       
-      {/* Updated plan display section */}
       {parsedPlanData && (
-        <CardFooter className="flex-col items-start space-y-4 bg-brand-charcoal p-6 rounded-b-lg"> {/* Changed background, added padding */}
-          <h4 className="text-xl font-semibold text-neon-purple w-full">{parsedPlanData.mainTitle}</h4>
+        <CardFooter className="flex-col items-start space-y-4 bg-brand-charcoal/50 p-4 md:p-6 rounded-b-lg">
+          <h4 className="text-3xl font-bold text-neon-purple w-full text-center mb-6 tracking-tight animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+            {parsedPlanData.mainTitle}
+          </h4>
           
           {parsedPlanData.items.length > 0 && (
-            <div className="space-y-4 w-full">
-              {parsedPlanData.items.map((item, index) => (
-                <div 
-                  key={index} 
-                  className="flex items-start space-x-4 p-4 bg-brand-deep-black rounded-lg shadow-lg hover:shadow-neon-purple/40 transition-shadow duration-300"
-                >
-                  <item.icon className="h-7 w-7 text-neon-teal mt-1 flex-shrink-0" />
-                  <div className="flex-grow">
-                    <h5 className="font-semibold text-white text-lg mb-1">{item.title}</h5>
-                    <p className="text-sm text-gray-300 leading-relaxed">{item.teaser}</p>
+            <div className="relative w-full px-2 md:px-4 py-4">
+              <div className="space-y-10"> {/* Increased space-y for better separation */}
+                {parsedPlanData.items.map((item, index) => (
+                  <div 
+                    key={index} 
+                    className="relative pl-16 animate-fade-in-up"
+                    style={{ animationDelay: `${index * 150 + 300}ms` }}
+                  >
+                    {/* Path Connector Line element */}
+                    {index > 0 && (
+                      <div className="absolute left-[28px] bottom-[calc(100%_-_4px)] h-10 w-[3px] bg-neon-teal/60 transform -translate-x-1/2 rounded-full"></div>
+                    )}
+                    {index < parsedPlanData.items.length - 1 && (
+                       <div className="absolute left-[28px] top-[calc(100%_-_4px)] h-10 w-[3px] bg-neon-teal/60 transform -translate-x-1/2 rounded-full"></div>
+                    )}
+
+                    {/* Step Number/Marker (Circle) */}
+                    <div 
+                      className="absolute top-[50%] left-[28px] transform -translate-y-1/2 -translate-x-1/2 z-10 
+                                 h-14 w-14 bg-neon-teal rounded-full flex items-center justify-center 
+                                 shadow-lg border-4 border-brand-deep-black ring-2 ring-neon-teal/50"
+                    >
+                      <span className="text-white font-bold text-2xl">{index + 1}</span>
+                    </div>
+                    
+                    {/* Step Card Content */}
+                    <div 
+                      className="ml-0 p-5 md:p-6 bg-brand-deep-black/80 backdrop-blur-md rounded-xl shadow-xl hover:shadow-neon-purple/70 border border-neon-purple/40 hover:border-neon-purple/80 transition-all duration-300 ease-in-out transform hover:scale-[1.03] min-h-[120px] flex flex-col justify-center"
+                    >
+                      <div className="flex items-center mb-2">
+                        <item.icon className="h-7 w-7 text-neon-teal mr-3 flex-shrink-0" />
+                        <h5 className="font-semibold text-white text-xl md:text-2xl">{item.title}</h5>
+                      </div>
+                      <p className="text-gray-300 leading-relaxed text-sm md:text-base">{item.teaser}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           )}
           
           {parsedPlanData.tipsSection && (
-              <div className="mt-3 p-4 bg-brand-deep-black rounded-lg shadow-lg w-full">
-                  <pre className="text-sm text-gray-300 whitespace-pre-wrap font-sans">{parsedPlanData.tipsSection}</pre>
+              <div className="mt-8 w-full p-5 md:p-6 bg-brand-charcoal/80 backdrop-blur-md rounded-xl shadow-lg border border-neon-teal/40 animate-fade-in-up" style={{ animationDelay: `${(parsedPlanData.items.length) * 150 + 500}ms` }}>
+                  <h5 className="flex items-center text-xl font-semibold text-neon-teal mb-3">
+                      <Lightbulb className="h-6 w-6 mr-2" />
+                      Helpful Hints
+                  </h5>
+                  <pre className="text-sm md:text-base text-gray-300 whitespace-pre-wrap font-sans">{parsedPlanData.tipsSection.replace(/^###\s*Budget-Friendly Tips:/i, '').trim()}</pre>
               </div>
           )}
 
           {parsedPlanData.outroText && (
-              <div className="mt-3 p-4 bg-brand-deep-black rounded-lg shadow-lg w-full">
-                   <p className="text-sm text-gray-300 italic">{parsedPlanData.outroText}</p>
+              <div className="mt-6 w-full p-5 md:p-6 bg-brand-charcoal/80 backdrop-blur-md rounded-xl shadow-lg border border-neon-teal/40 animate-fade-in-up" style={{ animationDelay: `${(parsedPlanData.items.length) * 150 + 700}ms` }}>
+                   <h5 className="flex items-center text-xl font-semibold text-neon-teal mb-3">
+                      <Compass className="h-6 w-6 mr-2" />
+                      Your Adventure Awaits!
+                  </h5>
+                   <p className="text-sm md:text-base text-gray-300 italic">{parsedPlanData.outroText}</p>
               </div>
           )}
 
-          {/* Fallback to raw Textarea if parsing fails to produce items but raw plan exists */}
           {generatedPlan && parsedPlanData.items.length === 0 && !parsedPlanData.tipsSection && !parsedPlanData.outroText && (
             <Textarea
               value={generatedPlan}
               readOnly
               rows={8}
-              className="w-full bg-brand-deep-black border-gray-700 text-gray-200 p-3 rounded-md whitespace-pre-wrap mt-2"
+              className="w-full bg-brand-deep-black border-gray-700 text-gray-200 p-3 rounded-md whitespace-pre-wrap mt-4"
             />
           )}
         </CardFooter>
