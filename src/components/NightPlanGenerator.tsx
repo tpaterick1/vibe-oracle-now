@@ -1,15 +1,16 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button"; // Added Button
-import { Loader2 } from 'lucide-react'; // Added Loader2
+import { Button } from "@/components/ui/button";
+import { Loader2 } from 'lucide-react';
 import PromptCarousel from '@/components/PromptCarousel';
-import NightPlanDisplay from './NightPlanDisplay'; // Keep NightPlanDisplay
+import NightPlanDisplay from './NightPlanDisplay';
 import { Vibe } from '@/data/venues';
 import { useNightPlanGeneration } from '@/hooks/useNightPlanGeneration';
+import VibeAgentMessage from './VibeAgentMessage';
 
 const NightPlanGenerator: React.FC = () => {
   const [selectedMood, setSelectedMood] = useState<Vibe | null>(null);
+  const [agentMessage, setAgentMessage] = useState<string>("Hey there! Looking for an adventure? What's your vibe tonight?");
 
   const { 
     generatedPlan, 
@@ -21,17 +22,19 @@ const NightPlanGenerator: React.FC = () => {
 
   const handleSelectMood = (mood: Vibe) => {
     setSelectedMood(prevMood => prevMood === mood ? null : mood);
+    setAgentMessage(`Thinking about a ${mood} night? Let's see...`);
   };
 
   const handleFormSubmit = () => {
-    // Pass default/placeholder values for budget, time, numPeople
-    // as the hook useNightPlanGeneration (read-only) still expects them.
     generatePlan("", "", "1", selectedMood); 
   };
 
   return (
     <Card className="w-full max-w-4xl mx-auto my-12 glassmorphism-card border-neon-purple animate-fade-in-up" style={{animationDelay: '1.2s'}}>
       <CardContent className="space-y-8 py-8">
+        
+        <VibeAgentMessage message={agentMessage} />
+
         <div className="mb-6"> 
           <PromptCarousel selectedMood={selectedMood} onSelectMood={handleSelectMood} />
         </div>
@@ -39,7 +42,7 @@ const NightPlanGenerator: React.FC = () => {
         <div className="flex justify-center">
             <Button
                 onClick={handleFormSubmit}
-                disabled={isLoading || !selectedMood} // Also disable if no mood is selected
+                disabled={isLoading || !selectedMood}
                 className="w-full max-w-xs bg-neon-purple hover:bg-fuchsia-600 text-white font-semibold py-3 text-lg"
             >
                 {isLoading ? (
