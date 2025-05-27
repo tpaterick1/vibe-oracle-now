@@ -11,28 +11,39 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { toast } from 'sonner';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Mail } from 'lucide-react';
 
-const formSchema = z.object({
+const passwordAuthSchema = z.object({
   email: z.string().email({ message: 'Invalid email address.' }),
   password: z.string().min(6, { message: 'Password must be at least 6 characters.' }),
 });
 
-type FormData = z.infer<typeof formSchema>;
+type PasswordAuthFormData = z.infer<typeof passwordAuthSchema>;
+
+const magicLinkSchema = z.object({
+  email: z.string().email({ message: 'Invalid email address.' }),
+});
+
+type MagicLinkFormData = z.infer<typeof magicLinkSchema>;
 
 const AuthPage: React.FC = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [isMagicLinkLoading, setIsMagicLinkLoading] = useState(false);
 
-  const { register: registerLogin, handleSubmit: handleLoginSubmit, formState: { errors: loginErrors } } = useForm<FormData>({
-    resolver: zodResolver(formSchema),
+  const { register: registerLogin, handleSubmit: handleLoginSubmit, formState: { errors: loginErrors } } = useForm<PasswordAuthFormData>({
+    resolver: zodResolver(passwordAuthSchema),
   });
 
-  const { register: registerSignup, handleSubmit: handleSignupSubmit, formState: { errors: signupErrors } } = useForm<FormData>({
-    resolver: zodResolver(formSchema),
+  const { register: registerSignup, handleSubmit: handleSignupSubmit, formState: { errors: signupErrors } } = useForm<PasswordAuthFormData>({
+    resolver: zodResolver(passwordAuthSchema),
   });
 
-  const handleLogin: SubmitHandler<FormData> = async (data) => {
+  const { register: registerMagicLink, handleSubmit: handleMagicLinkSubmit, formState: { errors: magicLinkErrors } } = useForm<MagicLinkFormData>({
+    resolver: zodResolver(magicLinkSchema),
+  });
+
+  const handleLogin: SubmitHandler<PasswordAuthFormData> = async (data) => {
     setIsLoading(true);
     try {
       const { error } = await supabase.auth.signInWithPassword({
@@ -49,7 +60,7 @@ const AuthPage: React.FC = () => {
     }
   };
 
-  const handleSignup: SubmitHandler<FormData> = async (data) => {
+  const handleSignup: SubmitHandler<PasswordAuthFormData> = async (data) => {
     setIsLoading(true);
     try {
       const { error } = await supabase.auth.signUp({
@@ -58,9 +69,6 @@ const AuthPage: React.FC = () => {
       });
       if (error) throw error;
       toast.success('Signed up successfully! Please check your email to confirm.');
-      // Depending on your Supabase settings (email confirmation),
-      // user might not be logged in immediately.
-      // For now, we navigate to home. If email confirmation is on, they'll be redirected if Index is protected.
       navigate('/'); 
     } catch (error: any) {
       toast.error(error.error_description || error.message);
@@ -69,9 +77,30 @@ const AuthPage: React.FC = () => {
     }
   };
 
+  const handleMagicLinkSignIn: SubmitHandler<MagicLinkFormData> = async (data) => {
+    setIsMagicLinkLoading(true);
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email: data.email,
+        options: {
+          // emailRedirectTo: should be your site's URL where users are redirected after clicking the link
+          // For local development, window.location.origin should work if your Supabase URL config is correct.
+          // For production, ensure this matches your deployed site's URL.
+          emailRedirectTo: window.location.origin,
+        },
+      });
+      if (error) throw error;
+      toast.success('Magic link sent! Check your email to log in.');
+    } catch (error: any) {
+      toast.error(error.error_description || error.message);
+    } finally {
+      setIsMagicLinkLoading(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-brand-deep-black p-4">
-      <Tabs defaultValue="login" className="w-[400px] glassmorphism-card border-neon-pink">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-brand-deep-black p-4 space-y-8">
+      <Tabs defaultValue="login" className="w-full max-w-md glassmorphism-card border-neon-pink">
         <TabsList className="grid w-full grid-cols-2 bg-brand-charcoal">
           <TabsTrigger value="login" className="data-[state=active]:bg-neon-pink data-[state=active]:text-white">Login</TabsTrigger>
           <TabsTrigger value="signup" className="data-[state=active]:bg-neon-pink data-[state=active]:text-white">Sign Up</TabsTrigger>
@@ -79,7 +108,7 @@ const AuthPage: React.FC = () => {
         <TabsContent value="login">
           <Card className="bg-transparent border-none shadow-none">
             <CardHeader>
-              <CardTitle className="neon-text-pink">Login</CardTitle>
+              <CardTitle className="neon-text-pink">Login with Password</CardTitle>
               <CardDescription className="text-gray-400">Access your St. Augustine Tonight account.</CardDescription>
             </CardHeader>
             <form onSubmit={handleLoginSubmit(handleLogin)}>
@@ -107,7 +136,7 @@ const AuthPage: React.FC = () => {
         <TabsContent value="signup">
           <Card className="bg-transparent border-none shadow-none">
             <CardHeader>
-              <CardTitle className="neon-text-pink">Sign Up</CardTitle>
+              <CardTitle className="neon-text-pink">Sign Up with Password</CardTitle>
               <CardDescription className="text-gray-400">Create a new account to save your preferences.</CardDescription>
             </CardHeader>
             <form onSubmit={handleSignupSubmit(handleSignup)}>
@@ -133,6 +162,32 @@ const AuthPage: React.FC = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      <Card className="w-full max-w-md glassmorphism-card border-neon-teal">
+        <CardHeader>
+          <CardTitle className="neon-text-teal">Sign in with Magic Link</CardTitle>
+          <CardDescription className="text-gray-400">Enter your email to receive a one-time login link.</CardDescription>
+        </CardHeader>
+        <form onSubmit={handleMagicLinkSubmit(handleMagicLinkSignIn)}>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="magic-link-email" className="text-gray-300">Email</Label>
+              <Input id="magic-link-email" type="email" placeholder="you@example.com" {...registerMagicLink('email')} className="bg-brand-charcoal border-gray-700 text-white focus:border-neon-teal" />
+              {magicLinkErrors.email && <p className="text-sm text-red-500">{magicLinkErrors.email.message}</p>}
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button type="submit" className="w-full bg-neon-teal hover:bg-neon-teal/80 text-white" disabled={isMagicLinkLoading}>
+              {isMagicLinkLoading ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Mail className="mr-2 h-4 w-4" />
+              )}
+              Send Magic Link
+            </Button>
+          </CardFooter>
+        </form>
+      </Card>
     </div>
   );
 };
