@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -32,13 +31,12 @@ const NightPlanGenerator: React.FC<NightPlanGeneratorProps> = ({ selectedMood, s
   } = useNightPlanGeneration();
 
   useEffect(() => {
-    // Logic for agentMessage depends on selectedMood (prop) and additionalDetails (local state)
     if (additionalDetails && selectedMood) {
       setAgentMessage(`Got it, a ${selectedMood} night with some specifics! Anything else before we craft your quest?`);
     } else if (additionalDetails && !selectedMood) {
       setAgentMessage(`Interesting details... now, what's the main vibe for tonight?`);
     } else if (!additionalDetails && selectedMood) {
-      setAgentMessage(`Thinking about a ${selectedMood} night? Awesome! Add any other details and let's craft your quest!`);
+      setAgentMessage(`${selectedMood} vibes are calling! Got any secret scrolls (aka details) to add before we unleash the night?`);
     } else {
       setAgentMessage("Hey there! Looking for an adventure? What's your vibe tonight? Feel free to add more details below!");
     }
@@ -63,7 +61,7 @@ const NightPlanGenerator: React.FC<NightPlanGeneratorProps> = ({ selectedMood, s
       if (additionalDetails) {
         setAgentMessage(`A ${newMood} night with those details sounds great! Ready to go?`);
       } else {
-        setAgentMessage(`Thinking about a ${newMood} night? Awesome! Add any other details and let's craft your quest!`);
+        setAgentMessage(`${newMood} vibes are calling! Got any secret scrolls (aka details) to add before we unleash the night?`);
       }
     }
   };
@@ -130,4 +128,3 @@ const NightPlanGenerator: React.FC<NightPlanGeneratorProps> = ({ selectedMood, s
 };
 
 export default NightPlanGenerator;
-
