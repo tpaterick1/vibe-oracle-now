@@ -1,3 +1,4 @@
+
 import { BusynessLevel } from './moodVisuals'; // Added import
 
 export type Vibe = 
@@ -52,7 +53,7 @@ export const categorizedMoods: MoodCategory[] = [
     ]
   },
   {
-    name: "What kind of place or activity?",
+    name: "What's going on?", // Updated category name
     moods: [
       { name: "Bar", color: "bg-neon-orange", shadow: "shadow-neon-orange", textColorClass: "neon-text-orange" },
       { name: "Restaurant", color: "bg-neon-red", shadow: "shadow-neon-red", textColorClass: "neon-text-red" },
