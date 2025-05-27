@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input"; // Keep for numPeople
@@ -30,9 +29,10 @@ const NightPlanForm: React.FC<NightPlanFormProps> = ({
   error,
 }) => {
   const budgetOptions = [
-    { value: "$0-$50", label: "$0-$50" },
-    { value: "$50-$100", label: "$50-$100" },
-    { value: "$100+", label: "$100+" },
+    { value: "< $50", label: "< $50" },
+    { value: "< $100", label: "< $100" },
+    { value: "< $200", label: "< $200" },
+    { value: "NO BUDGET!", label: "No Budget!" },
   ];
 
   const timeOptions = [
@@ -53,7 +53,7 @@ const NightPlanForm: React.FC<NightPlanFormProps> = ({
             type="single"
             value={budget}
             onValueChange={(value) => { if (value) setBudget(value); }} // Prevents unselecting all
-            className="grid grid-cols-3 gap-2 w-full"
+            className="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full" // Updated grid columns
             id="budget-group"
             aria-label="Budget selection"
             disabled={isLoading}

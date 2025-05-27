@@ -7,8 +7,8 @@ import { Vibe } from '@/data/venues'; // Import Vibe
 import { useNightPlanGeneration } from '@/hooks/useNightPlanGeneration';
 
 const NightPlanGenerator: React.FC = () => {
-  const [budget, setBudget] = useState<string>('$0-$50'); // Updated default budget
-  const [time, setTime] = useState<string>('Evening'); // Updated default time
+  const [budget, setBudget] = useState<string>('< $50'); // Updated default budget
+  const [time, setTime] = useState<string>('Evening'); // Default time
   const [numPeople, setNumPeople] = useState<string>('2');
   const [selectedMood, setSelectedMood] = useState<Vibe | null>(null); // Add state for selectedMood
 
