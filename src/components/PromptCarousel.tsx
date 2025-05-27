@@ -1,27 +1,14 @@
-
 import React from 'react';
 import { moods, Vibe } from '@/data/venues';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { Star, Heart, Circle, ChevronUp, EyeOff, Clock, Compass, Lightbulb } from 'lucide-react';
+import { moodIcons } from '@/data/moodVisuals';
 
-interface PromptCarouselProps { // Renamed from MoodSelectorProps
-  selectedMood: Vibe | null; // Name kept for now, represents selected prompt/vibe
-  onSelectMood: (mood: Vibe) => void; // Name kept for now
+interface PromptCarouselProps {
+  selectedMood: Vibe | null;
+  onSelectMood: (mood: Vibe) => void;
 }
 
-const moodIcons: Record<Vibe, React.ElementType> = {
-  "Alive": Star,
-  "Romantic": Heart,
-  "Peaceful": Circle,
-  "Energetic": ChevronUp,
-  "Mysterious": EyeOff,
-  "Chill": Clock,
-  "Adventurous": Compass,
-  "Intellectual": Lightbulb,
-};
-
-// Renamed component from MoodSelector to PromptCarousel
 const PromptCarousel: React.FC<PromptCarouselProps> = ({ selectedMood, onSelectMood }) => {
   return (
     <div className="my-8 animate-fade-in-up animation-delay-400">
@@ -57,4 +44,3 @@ const PromptCarousel: React.FC<PromptCarouselProps> = ({ selectedMood, onSelectM
 };
 
 export default PromptCarousel;
-

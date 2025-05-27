@@ -1,18 +1,20 @@
+import { BusynessLevel } from './moodVisuals'; // Added import
 
 export type Vibe = "Alive" | "Romantic" | "Peaceful" | "Energetic" | "Chill" | "Mysterious" | "Adventurous" | "Intellectual";
 
 export interface Venue {
   id: string;
   name: string;
-  vibeTags: Vibe[]; // This is mapped from vibe_tags and elements are cast to Vibe
+  vibeTags: Vibe[];
   story: string | null;
   image: string | null;
-  neonColorClass: string | null; // This is mapped from neon_color_class
-  textColorClass: string | null; // This is mapped from text_color_class
+  neonColorClass: string | null;
+  textColorClass: string | null;
   lat: number;
   lng: number;
-  created_at: string; // Added from Supabase
-  updated_at: string; // Added from Supabase
+  created_at: string;
+  updated_at: string;
+  busyness?: BusynessLevel; // Added optional busyness property
 }
 
 export const moods: { name: Vibe; color: string, shadow: string }[] = [

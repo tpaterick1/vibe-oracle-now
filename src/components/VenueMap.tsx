@@ -5,9 +5,8 @@ import { MapPin } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-// Removed: import { GOOGLE_MAPS_API_KEY as DEFAULT_PLACEHOLDER_API_KEY } from '@/config/mapConstants';
 import { cn } from '@/lib/utils';
-// import { useNavigate } from 'react-router-dom'; // Optional
+import { moodIcons, busynessEmojis } from '@/data/moodVisuals';
 
 interface VenueMapProps {
   venues: Venue[];
@@ -18,7 +17,6 @@ interface VenueMapProps {
 
 const VenueMap: React.FC<VenueMapProps> = ({ venues, apiKey, defaultCenter, defaultZoom }) => {
   const { user } = useAuth();
-  // const navigate = useNavigate(); // Optional
 
   const handleMarkerClick = async (venue: Venue) => {
     if (venue.id.startsWith('event-') && user) {
@@ -50,7 +48,6 @@ const VenueMap: React.FC<VenueMapProps> = ({ venues, apiKey, defaultCenter, defa
     }
   };
 
-  // Updated condition to correctly check for placeholder API keys
   if (!apiKey || apiKey === "YOUR_GOOGLE_MAPS_API_KEY") {
     return (
       <div className="p-4 my-8 text-center bg-brand-charcoal rounded-lg shadow-lg">
@@ -72,24 +69,31 @@ const VenueMap: React.FC<VenueMapProps> = ({ venues, apiKey, defaultCenter, defa
           disableDefaultUI={true}
           className="w-full h-full"
         >
-          {venues.map((venue) => (
-            <AdvancedMarker
-              key={venue.id}
-              position={{ lat: venue.lat, lng: venue.lng }}
-              title={venue.name}
-              onClick={() => handleMarkerClick(venue)}
-            >
-              <div className={cn(
-                "transform -translate-x-1/2 -translate-y-full",
-                venue.id.startsWith('event-') ? 'cursor-pointer' : '' // Add cursor-pointer only for events
-              )}>
-                <MapPin className="h-8 w-8 text-neon-pink" fill="#FF00AA" strokeWidth={1.5} /> 
-                <span className="absolute top-[-30px] left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs text-white bg-brand-deep-black rounded whitespace-nowrap shadow-md">
-                  {venue.name}
-                </span>
-              </div>
-            </AdvancedMarker>
-          ))}
+          {venues.map((venue) => {
+            const VibeIcon = venue.vibeTags.length > 0 ? moodIcons[venue.vibeTags[0]] : null;
+            const busynessEmoji = venue.busyness ? busynessEmojis[venue.busyness] : null;
+
+            return (
+              <AdvancedMarker
+                key={venue.id}
+                position={{ lat: venue.lat, lng: venue.lng }}
+                title={venue.name}
+                onClick={() => handleMarkerClick(venue)}
+              >
+                <div className={cn(
+                  "relative flex flex-col items-center",
+                  venue.id.startsWith('event-') ? 'cursor-pointer' : ''
+                )}>
+                  <MapPin className="h-8 w-8 text-neon-pink" fill="#FF00AA" strokeWidth={1.5} />
+                  <div className="absolute top-[-40px] left-1/2 transform -translate-x-1/2 px-2 py-1 text-xs text-white bg-brand-deep-black rounded whitespace-nowrap shadow-md flex items-center space-x-1">
+                    {VibeIcon && <VibeIcon className="h-3 w-3" />}
+                    <span>{venue.name}</span>
+                    {busynessEmoji && <span className="text-sm">{busynessEmoji}</span>}
+                  </div>
+                </div>
+              </AdvancedMarker>
+            );
+          })}
         </Map>
       </APIProvider>
     </div>

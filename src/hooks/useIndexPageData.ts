@@ -1,8 +1,8 @@
-
 import { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Venue, Vibe } from '@/data/venues';
+import { BusynessLevel } from '@/data/moodVisuals';
 
 // Interface for External Events based on the Supabase table
 export interface ExternalEvent {
@@ -79,6 +79,9 @@ const fetchExternalEvents = async (): Promise<ExternalEvent[]> => {
   return data || [];
 };
 
+const busynessLevels: BusynessLevel[] = ["empty", "light", "medium", "busy", "on_fire"];
+const getRandomBusyness = (): BusynessLevel => busynessLevels[Math.floor(Math.random() * busynessLevels.length)];
+
 export const useIndexPageData = (selectedMood: Vibe | null) => {
   const allVenuesQuery = useQuery<Venue[], Error>({
     queryKey: ['venues'],
@@ -94,40 +97,56 @@ export const useIndexPageData = (selectedMood: Vibe | null) => {
     if (!allVenuesQuery.data) {
       return [];
     }
+    const venuesWithBusyness = allVenuesQuery.data.map(venue => ({
+      ...venue,
+      busyness: venue.busyness || getRandomBusyness(),
+    }));
     if (!selectedMood) {
-      return allVenuesQuery.data.slice(0, 9); 
+      return venuesWithBusyness.slice(0, 9); 
     }
-    return allVenuesQuery.data.filter(venue => venue.vibeTags.includes(selectedMood));
+    return venuesWithBusyness.filter(venue => venue.vibeTags.includes(selectedMood));
   }, [selectedMood, allVenuesQuery.data]);
 
   const venuesForMap = useMemo(() => {
     const baseVenues: Venue[] = [];
     if (allVenuesQuery.data) {
-      baseVenues.push(...(filteredVenues.length > 0 ? filteredVenues : allVenuesQuery.data.slice(0, 5)));
+      const venuesToConsider = filteredVenues.length > 0 && selectedMood ? filteredVenues : allVenuesQuery.data;
+      baseVenues.push(...(venuesToConsider.slice(0, selectedMood ? venuesToConsider.length : 5).map(venue => ({
+        ...venue,
+        busyness: venue.busyness || getRandomBusyness(),
+      }))));
     }
 
     const mappedEvents: Venue[] = [];
     if (externalEventsQuery.data) {
       externalEventsQuery.data.forEach(ev => {
         if (ev.lat != null && ev.lng != null) {
+          // Assign a Vibe based on event_type for icon demonstration
+          let demoVibeTags: Vibe[] = [];
+          if (ev.event_type?.toLowerCase().includes('music') || ev.event_type?.toLowerCase().includes('concert')) demoVibeTags.push('Energetic');
+          else if (ev.event_type?.toLowerCase().includes('art') || ev.event_type?.toLowerCase().includes('exhibit')) demoVibeTags.push('Intellectual');
+          else if (ev.event_type?.toLowerCase().includes('market') || ev.event_type?.toLowerCase().includes('festival')) demoVibeTags.push('Alive');
+          else demoVibeTags.push('Chill');
+
           mappedEvents.push({
             id: `event-${ev.id}`,
             name: ev.event_title,
             lat: ev.lat,
             lng: ev.lng,
-            vibeTags: [],
+            vibeTags: demoVibeTags,
             story: `Event Type: ${ev.event_type}. ${ev.event_description || ''}. Starts: ${new Date(ev.start_datetime).toLocaleString()}. ${ev.venue_name ? 'At: ' + ev.venue_name : ''}`,
             image: ev.image_url || '/placeholder.svg',
             neonColorClass: 'neon-border-yellow-500', 
             textColorClass: 'text-neon-yellow',
             created_at: ev.created_at,
             updated_at: ev.updated_at,
+            busyness: getRandomBusyness(),
           });
         }
       });
     }
     return [...baseVenues, ...mappedEvents];
-  }, [filteredVenues, allVenuesQuery.data, externalEventsQuery.data]);
+  }, [filteredVenues, allVenuesQuery.data, externalEventsQuery.data, selectedMood]);
 
   return {
     allVenuesQuery,
