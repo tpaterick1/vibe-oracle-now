@@ -52,15 +52,11 @@ export default {
 					DEFAULT: 'hsl(var(--card))', // For glassmorphism
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				// Updated Custom Neon Colors for Vibes (more mature shades)
-				"neon-blue": "#4A90E2",     // Was #00CFFF (Alive) - Sophisticated Blue
+				// Updated Custom Neon Colors - Removed blue, purple, lavender, indigo
 				"neon-pink": "#D94F7A",     // Was #FF00AA (Energetic) - Deep Pink/Rose
-				"neon-purple": "#8360B3",   // Was #A020F0 (Mysterious) - Muted Purple
 				"neon-red": "#C94C4C",      // Was #FF1D58 (Romantic) - Warm Red
 				"neon-teal": "#43A08B",     // Was #00FCA8 (Peaceful) - Earthy Teal
-				"neon-lavender": "#A48BCC", // Was #C37EF5 (Chill) - Soft Lavender
         "neon-orange": "#E87E04",   // Was #FF9900 (Adventurous) - Burnt Orange
-        "neon-indigo": "#5B79C8",   // Was #7F00FF (Intellectual) - Dusty Indigo
 				"brand-deep-black": "#0A0A0A",
 				"brand-charcoal": "#1A1A1A",
 			},
@@ -99,14 +95,10 @@ export default {
         'subtle-pulse': 'subtle-pulse 2.5s ease-in-out infinite',
 			},
       boxShadow: { // These will automatically use the updated hex values from above
-        'neon-blue': '0 0 15px #4A90E2, 0 0 5px #4A90E2',
         'neon-pink': '0 0 15px #D94F7A, 0 0 5px #D94F7A',
-        'neon-purple': '0 0 15px #8360B3, 0 0 5px #8360B3',
         'neon-red': '0 0 15px #C94C4C, 0 0 5px #C94C4C',
         'neon-teal': '0 0 15px #43A08B, 0 0 5px #43A08B',
-        'neon-lavender': '0 0 15px #A48BCC, 0 0 5px #A48BCC',
         'neon-orange': '0 0 15px #E87E04, 0 0 5px #E87E04',
-        'neon-indigo': '0 0 15px #5B79C8, 0 0 5px #5B79C8',
       }
 		}
 	},

@@ -5,8 +5,7 @@
 
 @layer base {
   :root {
-    /* ... keep existing code (Core Colors, Card Styles, Popover Styles, etc.) */
-    --background: 222.2 84% 4.9%; /* Dark background */
+    --background: 222.2 84% 4.9%; /* Dark background (dark blue/black) */
     --foreground: 210 0% 100%; /* Light text -> White */
 
     /* Card Styles */
@@ -14,23 +13,23 @@
     --card-foreground: 210 0% 100%; /* -> White */
 
     /* Popover Styles */
-    --popover: 222.2 84% 4.9%;
+    --popover: 222.2 84% 4.9%; /* Same as background */
     --popover-foreground: 210 0% 100%; /* -> White */
 
-    /* Primary Action Styles */
-    --primary: 210 40% 98%; /* Default: Light primary (consider changing to a neon if buttons need neon bg) */
+    /* Primary Action Styles - Changed to Teal */
+    --primary: 165 40% 45%; /* Neon Teal */
     --primary-foreground: 210 0% 100%; /* Text on primary -> White */
 
-    /* Secondary Action Styles */
-    --secondary: 217.2 32.6% 17.5%;
+    /* Secondary Action Styles - Changed to Neutral Gray */
+    --secondary: 210 10% 23%; /* Dark Gray */
     --secondary-foreground: 210 0% 100%; /* -> White */
 
-    /* Muted Text Styles */
-    --muted: 217.2 32.6% 17.5%;
+    /* Muted Text Styles - Changed to Neutral Gray */
+    --muted: 210 10% 23%; /* Dark Gray */
     --muted-foreground: 210 20% 85%; /* Lighter gray for muted text */
 
-    /* Accent Styles */
-    --accent: 217.2 32.6% 17.5%;
+    /* Accent Styles - Changed to Neutral Darker Gray */
+    --accent: 210 10% 18%; /* Darker Gray */
     --accent-foreground: 210 0% 100%; /* -> White */
 
     /* Destructive Action Styles */
@@ -38,10 +37,9 @@
     --destructive-foreground: 210 0% 100%; /* -> White */
 
     /* Borders and Inputs */
-    /* Using HSL for neon-teal (#43A08B approx hsl(165, 40%, 45%)) */
-    --border: 165 40% 45%; /* Default border color -> Neon Teal */
-    --input: 165 40% 45%;  /* Input border color -> Neon Teal (also used by border-input class) */
-    --ring: 212.7 26.8% 83.9%; /* Focus ring */
+    --border: 165 40% 45%; /* Default border color -> Neon Teal (kept) */
+    --input: 165 40% 45%;  /* Input border color -> Neon Teal (kept) */
+    --ring: 165 40% 55%; /* Focus ring -> Lighter Teal */
 
     /* Radius */
     --radius: 0.75rem;
@@ -55,10 +53,8 @@
     @apply border-border; /* Applies the default neon border color to elements with 'border' class */
   }
   body {
-    @apply text-foreground; /* Default text color for the body will be white */
-    /* ... keep existing code (body background and font) */
-    background: linear-gradient(180deg, theme('colors.brand-deep-black') 0%, theme('colors.brand-charcoal') 100%);
-    min-height: 100vh; /* Ensures gradient covers the full viewport height */
+    @apply bg-background text-foreground; /* Default text color for the body will be white, background is dark blue/black */
+    min-height: 100vh; /* Ensures background covers the full viewport height */
     font-family: 'Poppins', sans-serif; /* Adding Poppins font */
   }
   /* ... keep existing code (Poppins font import comment) */
@@ -68,21 +64,12 @@
   .glassmorphism-card {
     @apply bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-20;
     background-color: rgba(26, 26, 26, 0.5); /* charcoal with opacity */
-    /* border: 1px solid rgba(255, 255, 255, 0.1); /* Old subtle border */
-    border: 1px solid hsl(var(--border)); /* New default neon border (Neon Teal) */
+    border: 1px solid hsl(var(--border)); /* Default neon border (Neon Teal - kept) */
   }
-  /* Updated neon-text utility classes to include all 8 neon colors */
-  .neon-text-blue { /* Was #00CFFF, now #4A90E2 */
-    color: #4A90E2;
-    text-shadow: 0 0 5px #4A90E2, 0 0 10px #4A90E2;
-  }
+  /* Updated neon-text utility classes - keeping pink, red, teal, orange */
   .neon-text-pink { /* Was #FF00AA, now #D94F7A */
     color: #D94F7A;
     text-shadow: 0 0 5px #D94F7A, 0 0 10px #D94F7A;
-  }
-  .neon-text-purple { /* Was #A020F0, now #8360B3 */
-    color: #8360B3;
-    text-shadow: 0 0 5px #8360B3, 0 0 10px #8360B3;
   }
    .neon-text-red { /* Was #FF1D58, now #C94C4C */
     color: #C94C4C;
@@ -92,17 +79,9 @@
     color: #43A08B;
     text-shadow: 0 0 5px #43A08B, 0 0 10px #43A08B;
   }
-  .neon-text-lavender { /* Was #C37EF5, now #A48BCC */
-    color: #A48BCC;
-    text-shadow: 0 0 5px #A48BCC, 0 0 10px #A48BCC;
-  }
   .neon-text-orange { /* New, from tailwind.config.ts #E87E04 */
     color: #E87E04;
     text-shadow: 0 0 5px #E87E04, 0 0 10px #E87E04;
-  }
-  .neon-text-indigo { /* New, from tailwind.config.ts #5B79C8 */
-    color: #5B79C8;
-    text-shadow: 0 0 5px #5B79C8, 0 0 10px #5B79C8;
   }
 }
 
@@ -115,3 +94,4 @@
     animation-delay: 0.4s;
   }
 }
+

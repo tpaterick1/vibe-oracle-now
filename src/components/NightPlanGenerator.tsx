@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,12 +7,12 @@ import NightPlanDisplay from './NightPlanDisplay';
 import { Vibe } from '@/data/venues';
 import { useNightPlanGeneration } from '@/hooks/useNightPlanGeneration';
 import VibeAgentMessage from './VibeAgentMessage';
-import { Textarea } from "@/components/ui/textarea"; // Import Textarea
-import { Label } from "@/components/ui/label"; // Import Label
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 const NightPlanGenerator: React.FC = () => {
   const [selectedMood, setSelectedMood] = useState<Vibe | null>(null);
-  const [additionalDetails, setAdditionalDetails] = useState<string>(""); // State for additional details
+  const [additionalDetails, setAdditionalDetails] = useState<string>("");
   const [agentMessage, setAgentMessage] = useState<string>("Hey there! Looking for an adventure? What's your vibe tonight? Feel free to add more details below!");
   
   const aiAvatarSrc = "https://source.unsplash.com/1535268647677-300dbf3d78d1";
@@ -63,7 +62,7 @@ const NightPlanGenerator: React.FC = () => {
   };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto my-12 glassmorphism-card border-neon-purple animate-fade-in-up" style={{animationDelay: '1.2s'}}>
+    <Card className="w-full max-w-4xl mx-auto my-12 glassmorphism-card border-neon-pink animate-fade-in-up" style={{animationDelay: '1.2s'}}>
       <CardContent className="space-y-8 py-8">
         
         <VibeAgentMessage message={agentMessage} avatarSrc={aiAvatarSrc} />
@@ -89,8 +88,8 @@ const NightPlanGenerator: React.FC = () => {
         <div className="flex justify-center mt-8">
             <Button
                 onClick={handleFormSubmit}
-                disabled={isLoading || (!selectedMood && !additionalDetails)} // Allow submission if either mood or details are provided
-                className="w-full max-w-xs bg-neon-purple hover:bg-fuchsia-600 text-white font-semibold py-3 text-lg"
+                disabled={isLoading || (!selectedMood && !additionalDetails)}
+                className="w-full max-w-xs bg-neon-pink hover:bg-pink-700 text-white font-semibold py-3 text-lg"
             >
                 {isLoading ? (
                 <>
@@ -116,4 +115,3 @@ const NightPlanGenerator: React.FC = () => {
 };
 
 export default NightPlanGenerator;
-
