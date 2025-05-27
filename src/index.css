@@ -5,7 +5,7 @@
 
 @layer base {
   :root {
-    /* Core Colors */
+    /* ... keep existing code (Core Colors, Card Styles, Popover Styles, etc.) */
     --background: 222.2 84% 4.9%; /* Dark background */
     --foreground: 210 0% 100%; /* Light text -> White */
 
@@ -71,30 +71,38 @@
     /* border: 1px solid rgba(255, 255, 255, 0.1); /* Old subtle border */
     border: 1px solid hsl(var(--border)); /* New default neon border (Neon Teal) */
   }
-  /* ... keep existing code (Updated neon-text utility classes) */
-  .neon-text-blue { /* Was #00CFFF */
+  /* Updated neon-text utility classes to include all 8 neon colors */
+  .neon-text-blue { /* Was #00CFFF, now #4A90E2 */
     color: #4A90E2;
     text-shadow: 0 0 5px #4A90E2, 0 0 10px #4A90E2;
   }
-  .neon-text-pink { /* Was #FF00AA */
+  .neon-text-pink { /* Was #FF00AA, now #D94F7A */
     color: #D94F7A;
     text-shadow: 0 0 5px #D94F7A, 0 0 10px #D94F7A;
   }
-  .neon-text-purple { /* Was #A020F0 */
+  .neon-text-purple { /* Was #A020F0, now #8360B3 */
     color: #8360B3;
     text-shadow: 0 0 5px #8360B3, 0 0 10px #8360B3;
   }
-   .neon-text-red { /* Was #FF1D58 */
+   .neon-text-red { /* Was #FF1D58, now #C94C4C */
     color: #C94C4C;
     text-shadow: 0 0 5px #C94C4C, 0 0 10px #C94C4C;
   }
-  .neon-text-teal { /* Was #00FCA8 */
+  .neon-text-teal { /* Was #00FCA8, now #43A08B */
     color: #43A08B;
     text-shadow: 0 0 5px #43A08B, 0 0 10px #43A08B;
   }
-  .neon-text-lavender { /* Was #C37EF5 */
+  .neon-text-lavender { /* Was #C37EF5, now #A48BCC */
     color: #A48BCC;
     text-shadow: 0 0 5px #A48BCC, 0 0 10px #A48BCC;
+  }
+  .neon-text-orange { /* New, from tailwind.config.ts #E87E04 */
+    color: #E87E04;
+    text-shadow: 0 0 5px #E87E04, 0 0 10px #E87E04;
+  }
+  .neon-text-indigo { /* New, from tailwind.config.ts #5B79C8 */
+    color: #5B79C8;
+    text-shadow: 0 0 5px #5B79C8, 0 0 10px #5B79C8;
   }
 }
 
@@ -107,4 +115,3 @@
     animation-delay: 0.4s;
   }
 }
-

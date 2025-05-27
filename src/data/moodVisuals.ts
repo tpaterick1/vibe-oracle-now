@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Star, Heart, Circle, ChevronUp, EyeOff, Clock, Compass, Lightbulb } from 'lucide-react';
+import { Star, Heart, Circle, ChevronUp, EyeOff, Clock, Compass, Lightbulb, PartyPopper, Music2, Utensils } from 'lucide-react';
 import { Vibe } from '@/data/venues';
 
 export const moodIcons: Record<Vibe, React.ElementType> = {
@@ -12,6 +11,9 @@ export const moodIcons: Record<Vibe, React.ElementType> = {
   "Chill": Clock,
   "Adventurous": Compass,
   "Intellectual": Lightbulb,
+  "Festive": PartyPopper,
+  "Groovy": Music2,
+  "Gourmet": Utensils,
 };
 
 export type BusynessLevel = "empty" | "light" | "medium" | "busy" | "on_fire";
@@ -32,4 +34,3 @@ export const busynessEmojis: Record<BusynessLevel, string> = {
 //   "busy": "🎉",
 //   "on_fire": "🔥",
 // };
-
