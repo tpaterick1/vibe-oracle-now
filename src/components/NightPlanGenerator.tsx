@@ -1,56 +1,26 @@
 
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { supabase } from '@/integrations/supabase/client';
-import { ParsedPlanData, parsePlanFromMarkdown } from '@/utils/planParsingUtils';
 import NightPlanForm from './NightPlanForm';
 import NightPlanDisplay from './NightPlanDisplay';
+import { useNightPlanGeneration } from '@/hooks/useNightPlanGeneration'; // Import the new hook
 
 const NightPlanGenerator: React.FC = () => {
   const [budget, setBudget] = useState<string>('moderate');
   const [time, setTime] = useState<string>('evening');
   const [numPeople, setNumPeople] = useState<string>('2');
-  const [generatedPlan, setGeneratedPlan] = useState<string>('');
-  const [parsedPlanData, setParsedPlanData] = useState<ParsedPlanData | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
 
-  const handleGeneratePlan = async () => {
-    setIsLoading(true);
-    setError(null);
-    setGeneratedPlan('');
-    setParsedPlanData(null); 
+  // Use the custom hook for plan generation logic and state
+  const { 
+    generatedPlan, 
+    parsedPlanData, 
+    isLoading, 
+    error, 
+    generatePlan 
+  } = useNightPlanGeneration();
 
-    try {
-      console.log("Invoking Supabase Edge Function 'generate-night-plan-openai'...");
-      const { data, error: functionError } = await supabase.functions.invoke('generate-night-plan-openai', {
-        body: { budget, time, numPeople },
-      });
-
-      console.log("Edge Function response data:", data);
-      console.log("Edge Function error:", functionError);
-
-      if (functionError) {
-        throw new Error(functionError.message || "Failed to invoke Edge Function.");
-      }
-
-      if (data && data.plan) {
-        setGeneratedPlan(data.plan);
-        const parsed = parsePlanFromMarkdown(data.plan);
-        setParsedPlanData(parsed);
-        console.log("Parsed plan data:", parsed);
-      } else if (data && data.error) {
-        throw new Error(data.error);
-      } else {
-        throw new Error("No plan generated or unexpected response structure from Edge Function.");
-      }
-    } catch (err: any) {
-      console.error("Error generating plan:", err);
-      setError(err.message || "Failed to generate plan. Check console for details.");
-      setParsedPlanData(null); 
-    } finally {
-      setIsLoading(false);
-    }
+  const handleFormSubmit = () => {
+    generatePlan(budget, time, numPeople);
   };
 
   return (
@@ -69,9 +39,9 @@ const NightPlanGenerator: React.FC = () => {
           setTime={setTime}
           numPeople={numPeople}
           setNumPeople={setNumPeople}
-          handleGeneratePlan={handleGeneratePlan}
-          isLoading={isLoading}
-          error={error}
+          handleGeneratePlan={handleFormSubmit} // Pass the new handler
+          isLoading={isLoading} // Get from hook
+          error={error} // Get from hook
         />
       </CardContent>
       
@@ -85,3 +55,4 @@ const NightPlanGenerator: React.FC = () => {
 };
 
 export default NightPlanGenerator;
+
