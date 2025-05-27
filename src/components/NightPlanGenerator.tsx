@@ -1,21 +1,21 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-// Input and Label are no longer needed directly here for budget, time, people
 import { Loader2 } from 'lucide-react';
 import PromptCarousel from '@/components/PromptCarousel';
 import NightPlanDisplay from './NightPlanDisplay';
 import { Vibe } from '@/data/venues';
 import { useNightPlanGeneration } from '@/hooks/useNightPlanGeneration';
 import VibeAgentMessage from './VibeAgentMessage';
+import { Textarea } from "@/components/ui/textarea"; // Import Textarea
+import { Label } from "@/components/ui/label"; // Import Label
 
 const NightPlanGenerator: React.FC = () => {
   const [selectedMood, setSelectedMood] = useState<Vibe | null>(null);
+  const [additionalDetails, setAdditionalDetails] = useState<string>(""); // State for additional details
   const [agentMessage, setAgentMessage] = useState<string>("Hey there! Looking for an adventure? What's your vibe tonight? Feel free to add more details below!");
   
-  // Removed budget, timeOfDay, numPeople states
-
   const aiAvatarSrc = "https://source.unsplash.com/1535268647677-300dbf3d78d1";
 
   const { 
@@ -26,18 +26,40 @@ const NightPlanGenerator: React.FC = () => {
     generatePlan 
   } = useNightPlanGeneration();
 
-  const handleSelectMood = (mood: Vibe) => {
-    setSelectedMood(prevMood => prevMood === mood ? null : mood);
-    if (selectedMood === mood) { // Deselecting
-      setAgentMessage(`Okay, no worries! What's your vibe then?`);
-    } else { // Selecting
-      setAgentMessage(`Thinking about a ${mood} night? Awesome! Add any other details and let's craft your quest!`);
+  useEffect(() => {
+    if (additionalDetails && selectedMood) {
+      setAgentMessage(`Got it, a ${selectedMood} night with some specifics! Anything else before we craft your quest?`);
+    } else if (additionalDetails && !selectedMood) {
+      setAgentMessage(`Interesting details... now, what's the main vibe for tonight?`);
+    } else if (!additionalDetails && selectedMood) {
+      setAgentMessage(`Thinking about a ${selectedMood} night? Awesome! Add any other details and let's craft your quest!`);
+    } else {
+      setAgentMessage("Hey there! Looking for an adventure? What's your vibe tonight? Feel free to add more details below!");
     }
+  }, [additionalDetails, selectedMood]);
+
+  const handleSelectMood = (mood: Vibe) => {
+    setSelectedMood(prevMood => {
+      const newMood = prevMood === mood ? null : mood;
+      if (newMood === null) { // Deselecting
+        if (additionalDetails) {
+          setAgentMessage(`Okay, no specific vibe chosen, but I see your notes. What's the mood?`);
+        } else {
+          setAgentMessage(`Okay, no worries! What's your vibe then?`);
+        }
+      } else { // Selecting or changing mood
+        if (additionalDetails) {
+          setAgentMessage(`A ${newMood} night with those details sounds great! Ready to go?`);
+        } else {
+          setAgentMessage(`Thinking about a ${newMood} night? Awesome! Add any other details and let's craft your quest!`);
+        }
+      }
+      return newMood;
+    });
   };
 
   const handleFormSubmit = () => {
-    // Pass empty strings for budget/time and "1" for numPeople as defaults
-    generatePlan("", "", "1", selectedMood); 
+    generatePlan("", "", "1", selectedMood, additionalDetails); 
   };
 
   return (
@@ -50,12 +72,24 @@ const NightPlanGenerator: React.FC = () => {
           <PromptCarousel selectedMood={selectedMood} onSelectMood={handleSelectMood} />
         </div>
 
-        {/* Input Fields for budget, time, and people have been removed */}
+        {/* Textarea for additional details */}
+        <div className="space-y-2">
+          <Label htmlFor="additional-details" className="text-lg font-semibold text-white">
+            Any other details? (Optional)
+          </Label>
+          <Textarea
+            id="additional-details"
+            placeholder="e.g., looking for live music, a quiet place, something near downtown, celebrating a birthday..."
+            value={additionalDetails}
+            onChange={(e) => setAdditionalDetails(e.target.value)}
+            className="bg-brand-charcoal border-gray-700 text-white placeholder-gray-500 focus:border-neon-pink min-h-[100px]"
+          />
+        </div>
         
         <div className="flex justify-center mt-8">
             <Button
                 onClick={handleFormSubmit}
-                disabled={isLoading || !selectedMood}
+                disabled={isLoading || (!selectedMood && !additionalDetails)} // Allow submission if either mood or details are provided
                 className="w-full max-w-xs bg-neon-purple hover:bg-fuchsia-600 text-white font-semibold py-3 text-lg"
             >
                 {isLoading ? (
@@ -82,3 +116,4 @@ const NightPlanGenerator: React.FC = () => {
 };
 
 export default NightPlanGenerator;
+
