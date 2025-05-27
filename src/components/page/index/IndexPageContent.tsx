@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react'; // Added useState
 import NightPlanGenerator from '@/components/NightPlanGenerator';
 import { useAuth } from '@/hooks/useAuth';
 import { useIndexPageData } from '@/hooks/useIndexPageData';
@@ -7,9 +7,11 @@ import AuthDisplay from '@/components/page/index/AuthDisplay';
 import VenueGrid from '@/components/page/index/VenueGrid';
 import MapDisplay from '@/components/page/index/MapDisplay';
 import { GOOGLE_MAPS_API_KEY, ST_AUGUSTINE_COORDS } from '@/config/mapConstants';
+import { Vibe } from '@/data/venues'; // Added Vibe import
 
 const IndexPageContent: React.FC = () => {
   const { user, logout, isLoading: authLoading } = useAuth();
+  const [selectedMood, setSelectedMood] = useState<Vibe | null>(null); // Added selectedMood state
 
   const { 
     allVenuesQuery, 
@@ -17,13 +19,15 @@ const IndexPageContent: React.FC = () => {
     filteredVenues,
     upcomingEvents,
     venuesForMap 
-  } = useIndexPageData(null);
+  } = useIndexPageData(selectedMood); // Pass dynamic selectedMood
 
   return (
     <>
       <AuthDisplay user={user} authLoading={authLoading} logout={logout} />
-      <NightPlanGenerator /> 
-      {/* MapDisplay is now rendered after NightPlanGenerator and before VenueGrid */}
+      <NightPlanGenerator 
+        selectedMood={selectedMood} 
+        setSelectedMood={setSelectedMood} 
+      /> 
       <MapDisplay
         allVenuesQuery={allVenuesQuery}
         externalEventsQuery={externalEventsQuery}
@@ -37,10 +41,11 @@ const IndexPageContent: React.FC = () => {
         externalEventsQuery={externalEventsQuery}
         filteredVenues={filteredVenues}
         upcomingEvents={upcomingEvents}
-        selectedMood={null}
+        selectedMood={selectedMood} // Pass dynamic selectedMood
       />
     </>
   );
 };
 
 export default IndexPageContent;
+

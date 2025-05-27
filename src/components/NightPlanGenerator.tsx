@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,8 +11,13 @@ import VibeAgentMessage from './VibeAgentMessage';
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
-const NightPlanGenerator: React.FC = () => {
-  const [selectedMood, setSelectedMood] = useState<Vibe | null>(null);
+interface NightPlanGeneratorProps {
+  selectedMood: Vibe | null;
+  setSelectedMood: (mood: Vibe | null) => void;
+}
+
+const NightPlanGenerator: React.FC<NightPlanGeneratorProps> = ({ selectedMood, setSelectedMood }) => {
+  // selectedMood and setSelectedMood are now props
   const [additionalDetails, setAdditionalDetails] = useState<string>("");
   const [agentMessage, setAgentMessage] = useState<string>("Hey there! Looking for an adventure? What's your vibe tonight? Feel free to add more details below!");
   
@@ -26,6 +32,7 @@ const NightPlanGenerator: React.FC = () => {
   } = useNightPlanGeneration();
 
   useEffect(() => {
+    // Logic for agentMessage depends on selectedMood (prop) and additionalDetails (local state)
     if (additionalDetails && selectedMood) {
       setAgentMessage(`Got it, a ${selectedMood} night with some specifics! Anything else before we craft your quest?`);
     } else if (additionalDetails && !selectedMood) {
@@ -38,26 +45,31 @@ const NightPlanGenerator: React.FC = () => {
   }, [additionalDetails, selectedMood]);
 
   const handleSelectMood = (mood: Vibe) => {
-    setSelectedMood(prevMood => {
-      const newMood = prevMood === mood ? null : mood;
-      if (newMood === null) { // Deselecting
-        if (additionalDetails) {
-          setAgentMessage(`Okay, no specific vibe chosen, but I see your notes. What's the mood?`);
-        } else {
-          setAgentMessage(`Okay, no worries! What's your vibe then?`);
-        }
-      } else { // Selecting or changing mood
-        if (additionalDetails) {
-          setAgentMessage(`A ${newMood} night with those details sounds great! Ready to go?`);
-        } else {
-          setAgentMessage(`Thinking about a ${newMood} night? Awesome! Add any other details and let's craft your quest!`);
-        }
+    // This function now calls the setSelectedMood prop and manages local agentMessage
+    const newMood = selectedMood === mood ? null : mood;
+    setSelectedMood(newMood); // Call the prop to update mood in parent
+
+    // Update agent message based on newMood (which is now the updated selectedMood from props in the next render)
+    // For immediate effect in agentMessage, we can use newMood directly here,
+    // or rely on the useEffect which will trigger when selectedMood prop changes.
+    // Let's adjust based on newMood directly for quicker feedback in agent message.
+    if (newMood === null) { // Deselecting
+      if (additionalDetails) {
+        setAgentMessage(`Okay, no specific vibe chosen, but I see your notes. What's the mood?`);
+      } else {
+        setAgentMessage(`Okay, no worries! What's your vibe then?`);
       }
-      return newMood;
-    });
+    } else { // Selecting or changing mood
+      if (additionalDetails) {
+        setAgentMessage(`A ${newMood} night with those details sounds great! Ready to go?`);
+      } else {
+        setAgentMessage(`Thinking about a ${newMood} night? Awesome! Add any other details and let's craft your quest!`);
+      }
+    }
   };
 
   const handleFormSubmit = () => {
+    // Uses selectedMood (prop)
     generatePlan("", "", "1", selectedMood, additionalDetails); 
   };
 
@@ -68,7 +80,10 @@ const NightPlanGenerator: React.FC = () => {
         <VibeAgentMessage message={agentMessage} avatarSrc={aiAvatarSrc} />
 
         <div className="mb-6"> 
-          <PromptCarousel selectedMood={selectedMood} onSelectMood={handleSelectMood} />
+          <PromptCarousel 
+            selectedMood={selectedMood} // Pass selectedMood (prop)
+            onSelectMood={handleSelectMood} 
+          />
         </div>
 
         {/* Textarea for additional details */}
@@ -115,3 +130,4 @@ const NightPlanGenerator: React.FC = () => {
 };
 
 export default NightPlanGenerator;
+

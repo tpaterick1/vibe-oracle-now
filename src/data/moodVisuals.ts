@@ -3,7 +3,7 @@ import React from 'react';
 import { 
   Star, Heart, Circle, ChevronUp, EyeOff, Clock, Compass, Lightbulb, PartyPopper, Music2, Utensils,
   Activity,
-  Sun as BeachIcon, // Changed Beach to Sun and aliased as BeachIcon
+  Sun as BeachIcon,
   Beer as Bar,
   CookingPot as Restaurant,
   Puzzle as Hobby
@@ -25,27 +25,18 @@ export const moodIcons: Record<Vibe, React.ElementType> = {
   // New Icons
   "Bar": Bar,
   "Restaurant": Restaurant,
-  "Beach": BeachIcon, // Using the aliased Sun icon
+  "Beach": BeachIcon,
   "Hobby": Hobby,
   "Activity": Activity,
 };
 
 export type BusynessLevel = "empty" | "light" | "medium" | "busy" | "on_fire";
 
-// Example using actual emojis:
-// export const busynessEmojis: Record<BusynessLevel, string> = {
-//   "empty": "💨",
-//   "light": "✨",
-//   "medium": "🙂",
-//   "busy": "🎉",
-//   "on_fire": "🔥",
-// };
-
 export const busynessEmojis: Record<BusynessLevel, string> = {
-  "empty": "썰렁", // Could be an emoji like 💨 or 🧊
-  "light": "한산", // ✨ or 😊
-  "medium": "보통", // 👍 or 🙂
-  "busy": "북적", // 🔥 or 🎉
-  "on_fire": "핫플", // 🚀 or 🤩
+  "empty": "🧊",    // Changed from "썰렁"
+  "light": "✨",    // Kept as is (example, was "한산")
+  "medium": "🙂",   // Kept as is (example, was "보통")
+  "busy": "🎉",    // Kept as is (example, was "북적")
+  "on_fire": "🔥",   // Changed from "핫플"
 };
 
