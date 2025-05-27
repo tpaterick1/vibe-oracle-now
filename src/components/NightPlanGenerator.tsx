@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,9 @@ import VibeAgentMessage from './VibeAgentMessage';
 const NightPlanGenerator: React.FC = () => {
   const [selectedMood, setSelectedMood] = useState<Vibe | null>(null);
   const [agentMessage, setAgentMessage] = useState<string>("Hey there! Looking for an adventure? What's your vibe tonight?");
+  
+  // Placeholder image for the AI avatar (grey tabby kitten)
+  const aiAvatarSrc = "https://source.unsplash.com/1535268647677-300dbf3d78d1";
 
   const { 
     generatedPlan, 
@@ -33,7 +37,7 @@ const NightPlanGenerator: React.FC = () => {
     <Card className="w-full max-w-4xl mx-auto my-12 glassmorphism-card border-neon-purple animate-fade-in-up" style={{animationDelay: '1.2s'}}>
       <CardContent className="space-y-8 py-8">
         
-        <VibeAgentMessage message={agentMessage} />
+        <VibeAgentMessage message={agentMessage} avatarSrc={aiAvatarSrc} />
 
         <div className="mb-6"> 
           <PromptCarousel selectedMood={selectedMood} onSelectMood={handleSelectMood} />
@@ -69,3 +73,4 @@ const NightPlanGenerator: React.FC = () => {
 };
 
 export default NightPlanGenerator;
+
