@@ -13,9 +13,9 @@ const IndexPageContent: React.FC = () => {
 
   const { 
     allVenuesQuery, 
-    externalEventsQuery, // Destructure externalEventsQuery
+    externalEventsQuery,
     filteredVenues,
-    upcomingEvents, // Destructure upcomingEvents
+    upcomingEvents,
     venuesForMap 
   } = useIndexPageData(null);
 
@@ -23,13 +23,7 @@ const IndexPageContent: React.FC = () => {
     <>
       <AuthDisplay user={user} authLoading={authLoading} logout={logout} />
       <NightPlanGenerator /> 
-      <VenueGrid 
-        allVenuesQuery={allVenuesQuery}
-        externalEventsQuery={externalEventsQuery} // Pass externalEventsQuery
-        filteredVenues={filteredVenues}
-        upcomingEvents={upcomingEvents} // Pass upcomingEvents
-        selectedMood={null}
-      />
+      {/* MapDisplay is now rendered after NightPlanGenerator and before VenueGrid */}
       <MapDisplay
         allVenuesQuery={allVenuesQuery}
         externalEventsQuery={externalEventsQuery}
@@ -38,9 +32,15 @@ const IndexPageContent: React.FC = () => {
         defaultCenter={ST_AUGUSTINE_COORDS}
         defaultZoom={13}
       />
+      <VenueGrid 
+        allVenuesQuery={allVenuesQuery}
+        externalEventsQuery={externalEventsQuery}
+        filteredVenues={filteredVenues}
+        upcomingEvents={upcomingEvents}
+        selectedMood={null}
+      />
     </>
   );
 };
 
 export default IndexPageContent;
-
