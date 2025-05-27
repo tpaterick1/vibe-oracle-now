@@ -92,6 +92,72 @@ export type Database = {
         }
         Relationships: []
       }
+      scraped_venue_pdp_data: {
+        Row: {
+          address: string | null
+          ai_summary: string | null
+          categories: string[] | null
+          created_at: string | null
+          description: string | null
+          game_night_info: string | null
+          id: string
+          images: Json | null
+          last_scraped_at: string | null
+          music_info: string | null
+          name: string
+          other_features: string | null
+          phone: string | null
+          scraped_content_html: string | null
+          scraped_content_markdown: string | null
+          source_url: string
+          specials_info: string | null
+          updated_at: string | null
+          website_link: string | null
+        }
+        Insert: {
+          address?: string | null
+          ai_summary?: string | null
+          categories?: string[] | null
+          created_at?: string | null
+          description?: string | null
+          game_night_info?: string | null
+          id?: string
+          images?: Json | null
+          last_scraped_at?: string | null
+          music_info?: string | null
+          name: string
+          other_features?: string | null
+          phone?: string | null
+          scraped_content_html?: string | null
+          scraped_content_markdown?: string | null
+          source_url: string
+          specials_info?: string | null
+          updated_at?: string | null
+          website_link?: string | null
+        }
+        Update: {
+          address?: string | null
+          ai_summary?: string | null
+          categories?: string[] | null
+          created_at?: string | null
+          description?: string | null
+          game_night_info?: string | null
+          id?: string
+          images?: Json | null
+          last_scraped_at?: string | null
+          music_info?: string | null
+          name?: string
+          other_features?: string | null
+          phone?: string | null
+          scraped_content_html?: string | null
+          scraped_content_markdown?: string | null
+          source_url?: string
+          specials_info?: string | null
+          updated_at?: string | null
+          website_link?: string | null
+        }
+        Relationships: []
+      }
       venues: {
         Row: {
           created_at: string

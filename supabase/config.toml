@@ -4,3 +4,11 @@ project_id = "udzdnevvfcrieoytzrzp"
 [functions.generate-night-plan-openai]
 # If your function needs to be called from the browser without auth, set verify_jwt to false
 # verify_jwt = false
+
+[functions.scrape-venue-pdp]
+# This function will use service_role key implicitly, so JWT verification isn't strictly needed
+# if invoked server-to-server or via authenticated Supabase client.
+# If you intend to call it from an unauthenticated client-side context (not recommended for this type of function),
+# you might set verify_jwt = false, but secure it by other means (e.g. API key in header checked by function).
+# For now, we assume it will be called in a secure context (e.g., by another function or admin script).
+# verify_jwt = true # Default, or can be omitted
