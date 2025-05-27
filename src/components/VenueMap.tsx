@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { APIProvider, Map, AdvancedMarker } from '@vis.gl/react-google-maps';
 import { Venue } from '@/data/venues';
@@ -7,6 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { GOOGLE_MAPS_API_KEY as DEFAULT_PLACEHOLDER_API_KEY } from '@/config/mapConstants';
+import { cn } from '@/lib/utils'; // Added this import
 // import { useNavigate } from 'react-router-dom'; // Optional
 
 interface VenueMapProps {
