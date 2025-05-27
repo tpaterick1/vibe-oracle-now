@@ -32,7 +32,7 @@ const NightPlanGenerator: React.FC<NightPlanGeneratorProps> = ({ selectedMood, s
 
   useEffect(() => {
     if (additionalDetails && selectedMood) {
-      setAgentMessage(`Got it, a ${selectedMood} night with some specifics! Anything else before we craft your quest?`);
+      setAgentMessage("St Augustine Tonight");
     } else if (additionalDetails && !selectedMood) {
       setAgentMessage(`Interesting details... now, what's the main vibe for tonight?`);
     } else if (!additionalDetails && selectedMood) {
@@ -58,8 +58,15 @@ const NightPlanGenerator: React.FC<NightPlanGeneratorProps> = ({ selectedMood, s
         setAgentMessage(`Okay, no worries! What's your vibe then?`);
       }
     } else { // Selecting or changing mood
+      // This condition in handleSelectMood will be overridden by useEffect if additionalDetails also exist.
+      // If additionalDetails is empty, this message will show.
+      // If additionalDetails is NOT empty, the useEffect will set "St Augustine Tonight"
       if (additionalDetails) {
-        setAgentMessage(`A ${newMood} night with those details sounds great! Ready to go?`);
+        // This message will likely be quickly replaced by the useEffect if both mood and details are set.
+        // However, to keep logic consistent, we can also update it here, or let useEffect handle it.
+        // Given the user's specific request, the useEffect is the primary place for "St Augustine Tonight".
+        // This will now also reflect "St Augustine Tonight" if a mood is selected AND details already exist.
+        setAgentMessage("St Augustine Tonight");
       } else {
         setAgentMessage(`${newMood} vibes are calling! Got any secret scrolls (aka details) to add before we unleash the night?`);
       }
