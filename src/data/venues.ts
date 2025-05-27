@@ -1,10 +1,10 @@
-
 import { BusynessLevel } from './moodVisuals'; // Added import
 
 export type Vibe = 
   | "Alive" | "Romantic" | "Peaceful" | "Energetic" | "Chill" 
   | "Mysterious" | "Adventurous" | "Intellectual"
-  | "Festive" | "Groovy" | "Gourmet"; // Added new vibes
+  | "Festive" | "Groovy" | "Gourmet"
+  | "Bar" | "Restaurant" | "Beach" | "Hobby" | "Activity"; // Added new vibes
 
 export interface Venue {
   id: string;
@@ -33,6 +33,12 @@ export const moods: { name: Vibe; color: string; shadow: string; textColorClass:
   { name: "Festive", color: "bg-neon-orange", shadow: "shadow-neon-orange", textColorClass: "neon-text-orange" }, // Re-using orange
   { name: "Groovy", color: "bg-neon-indigo", shadow: "shadow-neon-indigo", textColorClass: "neon-text-indigo" }, // Re-using indigo
   { name: "Gourmet", color: "bg-neon-red", shadow: "shadow-neon-red", textColorClass: "neon-text-red" }, // Re-using red
+  // New vibes with reused colors for now
+  { name: "Bar", color: "bg-neon-orange", shadow: "shadow-neon-orange", textColorClass: "neon-text-orange" },
+  { name: "Restaurant", color: "bg-neon-red", shadow: "shadow-neon-red", textColorClass: "neon-text-red" },
+  { name: "Beach", color: "bg-neon-blue", shadow: "shadow-neon-blue", textColorClass: "neon-text-blue" },
+  { name: "Hobby", color: "bg-neon-lavender", shadow: "shadow-neon-lavender", textColorClass: "neon-text-lavender" },
+  { name: "Activity", color: "bg-neon-pink", shadow: "shadow-neon-pink", textColorClass: "neon-text-pink" },
 ];
 
 // The static 'venues' array has been removed as data is now fetched from Supabase.

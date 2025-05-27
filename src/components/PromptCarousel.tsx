@@ -32,7 +32,7 @@ const PromptCarousel: React.FC<PromptCarouselProps> = ({ selectedMood, onSelectM
               style={{ animationDelay: `${index * 100}ms` }}
             >
               {IconComponent && (
-                <IconComponent className="mr-2 h-4 w-4 md:h-5 md:w-5" /> // Icon color will be inherited
+                <IconComponent className="mr-2 h-5 w-5 md:h-6 md:w-6" /> // Icon size increased
               )}
               {mood.name}
             </Button>
