@@ -35,6 +35,8 @@ interface ExternalEvent {
   lng: number | null;
   source_url: string | null;
   image_url: string | null;
+  created_at: string; // Added created_at
+  updated_at: string; // Added updated_at
 }
 
 const fetchVenues = async (): Promise<Venue[]> => {
@@ -81,7 +83,9 @@ const fetchExternalEvents = async (): Promise<ExternalEvent[]> => {
       lat,
       lng,
       source_url,
-      image_url
+      image_url,
+      created_at, 
+      updated_at 
     `)
     // Fetch events starting from today or in the future, limit to 50 for performance
     .gte('start_datetime', new Date().toISOString().split('T')[0] + 'T00:00:00.000Z') 
@@ -144,10 +148,10 @@ const Index = () => {
             vibeTags: [], // Events don't have VibeTags in the same way venues do
             story: `Event Type: ${ev.event_type}. ${ev.event_description || ''}. Starts: ${new Date(ev.start_datetime).toLocaleString()}. ${ev.venue_name ? 'At: ' + ev.venue_name : ''}`,
             image: ev.image_url || '/placeholder.svg',
-            // Using distinct colors for event markers, assuming VenueMap might use these
             neonColorClass: 'neon-border-yellow-500', 
             textColorClass: 'text-neon-yellow',
-            // created_at and updated_at are not part of the core Venue structure for the map.
+            created_at: ev.created_at, // Use fetched created_at
+            updated_at: ev.updated_at, // Use fetched updated_at
           });
         }
       });
