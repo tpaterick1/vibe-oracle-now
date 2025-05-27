@@ -5,8 +5,8 @@ import { MapPin } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { GOOGLE_MAPS_API_KEY as DEFAULT_PLACEHOLDER_API_KEY } from '@/config/mapConstants';
-import { cn } from '@/lib/utils'; // Added this import
+// Removed: import { GOOGLE_MAPS_API_KEY as DEFAULT_PLACEHOLDER_API_KEY } from '@/config/mapConstants';
+import { cn } from '@/lib/utils';
 // import { useNavigate } from 'react-router-dom'; // Optional
 
 interface VenueMapProps {
@@ -50,11 +50,13 @@ const VenueMap: React.FC<VenueMapProps> = ({ venues, apiKey, defaultCenter, defa
     }
   };
 
-  if (!apiKey || apiKey === "YOUR_GOOGLE_MAPS_API_KEY" || apiKey === DEFAULT_PLACEHOLDER_API_KEY) {
+  // Updated condition to correctly check for placeholder API keys
+  if (!apiKey || apiKey === "YOUR_GOOGLE_MAPS_API_KEY") {
     return (
       <div className="p-4 my-8 text-center bg-brand-charcoal rounded-lg shadow-lg">
         <p className="text-neon-pink">Google Maps API Key is missing or is a placeholder.</p>
-        <p className="text-muted-foreground">Please provide a valid API key in `src/config/mapConstants.ts`. For production, consider using environment variables.</p>
+        <p className="text-muted-foreground">Please provide a valid API key in `src/config/mapConstants.ts`. For production, consider using environment variables or Supabase secrets.</p>
+        <p className="text-sm text-gray-400 mt-2">You can get a Google Maps API key from the <a href="https://console.cloud.google.com/google/maps-apis/overview" target="_blank" rel="noopener noreferrer" className="underline hover:text-neon-teal">Google Cloud Console</a>.</p>
       </div>
     );
   }
