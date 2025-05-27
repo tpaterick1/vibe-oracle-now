@@ -4,6 +4,7 @@ import { Vibe, categorizedMoods, Mood } from '@/data/venues';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { moodIcons } from '@/data/moodVisuals';
+import { WandSparkles } from 'lucide-react'; // Import the WandSparkles icon
 import {
   Accordion,
   AccordionContent,
@@ -17,8 +18,6 @@ interface PromptCarouselProps {
 }
 
 const PromptCarousel: React.FC<PromptCarouselProps> = ({ selectedMood, onSelectMood }) => {
-  // Determine which accordion item should be open by default
-  // If a mood is selected, open the category it belongs to. Otherwise, open the first.
   const getDefaultAccordionValue = () => {
     if (selectedMood) {
       for (const category of categorizedMoods) {
@@ -34,7 +33,15 @@ const PromptCarousel: React.FC<PromptCarouselProps> = ({ selectedMood, onSelectM
 
   const handleMoodSelection = (moodName: Vibe, categoryName: string) => {
     onSelectMood(moodName);
-    setOpenAccordionItem(categoryName); // Keep the current accordion open or switch if selection is in a new one
+    setOpenAccordionItem(categoryName); 
+  };
+
+  const handleSurpriseMe = (categoryMoods: Mood[], categoryName: string) => {
+    if (categoryMoods.length > 0) {
+      const randomIndex = Math.floor(Math.random() * categoryMoods.length);
+      const randomMood = categoryMoods[randomIndex];
+      handleMoodSelection(randomMood.name, categoryName);
+    }
   };
 
   return (
@@ -81,6 +88,19 @@ const PromptCarousel: React.FC<PromptCarouselProps> = ({ selectedMood, onSelectM
                     </Button>
                   );
                 })}
+                {/* Surprise Me Button */}
+                <Button
+                  variant="outline"
+                  onClick={() => handleSurpriseMe(category.moods, category.name)}
+                  className={cn(
+                    "text-base px-4 py-3 md:text-lg md:px-6 md:py-5 rounded-lg border-2 transition-all duration-300 ease-in-out transform hover:scale-105 focus:scale-105",
+                    "glassmorphism-card border-opacity-50 text-muted-foreground hover:text-white hover:bg-neon-purple hover:border-transparent hover:shadow-neon-purple border-gray-700"
+                  )}
+                  style={{ animationDelay: `${(categoryIndex * 100) + (category.moods.length * 50)}ms` }} // Stagger animation
+                >
+                  <WandSparkles className="mr-2 h-4 w-4 md:h-5 md:w-5" />
+                  Surprise Me
+                </Button>
               </div>
             </AccordionContent>
           </AccordionItem>
@@ -91,4 +111,3 @@ const PromptCarousel: React.FC<PromptCarouselProps> = ({ selectedMood, onSelectM
 };
 
 export default PromptCarousel;
-
