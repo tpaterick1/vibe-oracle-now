@@ -1,7 +1,7 @@
 
-import React, { useState } from 'react';
-import PromptCarousel from '@/components/PromptCarousel';
-import { Vibe } from '@/data/venues';
+import React from 'react';
+// Removed PromptCarousel import
+// Removed Vibe import
 import NightPlanGenerator from '@/components/NightPlanGenerator';
 import { useAuth } from '@/hooks/useAuth';
 import { useIndexPageData } from '@/hooks/useIndexPageData';
@@ -11,7 +11,7 @@ import MapDisplay from '@/components/page/index/MapDisplay';
 import { GOOGLE_MAPS_API_KEY, ST_AUGUSTINE_COORDS } from '@/config/mapConstants';
 
 const IndexPageContent: React.FC = () => {
-  const [selectedMood, setSelectedMood] = useState<Vibe | null>(null);
+  // Removed selectedMood state and handleSelectMood function
   const { user, logout, isLoading: authLoading } = useAuth();
 
   const { 
@@ -19,21 +19,17 @@ const IndexPageContent: React.FC = () => {
     externalEventsQuery, 
     filteredVenues, 
     venuesForMap 
-  } = useIndexPageData(selectedMood);
-
-  const handleSelectMood = (mood: Vibe) => {
-    setSelectedMood(prevMood => prevMood === mood ? null : mood);
-  };
+  } = useIndexPageData(null); // Pass null as selectedMood is now handled internally by NightPlanGenerator or not at all here
 
   return (
     <>
       <AuthDisplay user={user} authLoading={authLoading} logout={logout} />
-      <NightPlanGenerator />
-      <PromptCarousel selectedMood={selectedMood} onSelectMood={handleSelectMood} />
+      <NightPlanGenerator /> 
+      {/* PromptCarousel removed from here */}
       <VenueGrid 
         allVenuesQuery={allVenuesQuery}
         filteredVenues={filteredVenues}
-        selectedMood={selectedMood}
+        selectedMood={null} // Pass null or remove if VenueGrid filtering changes
       />
       <MapDisplay
         allVenuesQuery={allVenuesQuery}

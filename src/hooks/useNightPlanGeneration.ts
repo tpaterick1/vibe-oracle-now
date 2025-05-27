@@ -2,13 +2,14 @@
 import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { ParsedPlanData, parsePlanFromMarkdown } from '@/utils/planParsingUtils';
+import { Vibe } from '@/data/venues'; // Ensure Vibe is available if needed for type, or use string
 
 interface UseNightPlanGenerationReturn {
   generatedPlan: string;
   parsedPlanData: ParsedPlanData | null;
   isLoading: boolean;
   error: string | null;
-  generatePlan: (budget: string, time: string, numPeople: string) => Promise<void>;
+  generatePlan: (budget: string, time: string, numPeople: string, mood: Vibe | null) => Promise<void>; // Added mood
 }
 
 export const useNightPlanGeneration = (): UseNightPlanGenerationReturn => {
@@ -17,16 +18,16 @@ export const useNightPlanGeneration = (): UseNightPlanGenerationReturn => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const generatePlan = useCallback(async (budget: string, time: string, numPeople: string) => {
+  const generatePlan = useCallback(async (budget: string, time: string, numPeople: string, mood: Vibe | null) => { // Added mood
     setIsLoading(true);
     setError(null);
     setGeneratedPlan('');
     setParsedPlanData(null);
 
     try {
-      console.log("Invoking Supabase Edge Function 'generate-night-plan-openai' from hook...");
+      console.log("Invoking Supabase Edge Function 'generate-night-plan-openai' from hook with params:", { budget, time, numPeople, mood });
       const { data, error: functionError } = await supabase.functions.invoke('generate-night-plan-openai', {
-        body: { budget, time, numPeople },
+        body: { budget, time, numPeople, mood }, // Added mood to body
       });
 
       console.log("Edge Function response data (hook):", data);
@@ -57,4 +58,3 @@ export const useNightPlanGeneration = (): UseNightPlanGenerationReturn => {
 
   return { generatedPlan, parsedPlanData, isLoading, error, generatePlan };
 };
-

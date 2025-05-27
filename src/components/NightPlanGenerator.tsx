@@ -3,14 +3,16 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import NightPlanForm from './NightPlanForm';
 import NightPlanDisplay from './NightPlanDisplay';
-import { useNightPlanGeneration } from '@/hooks/useNightPlanGeneration'; // Import the new hook
+import PromptCarousel from '@/components/PromptCarousel'; // Import PromptCarousel
+import { Vibe } from '@/data/venues'; // Import Vibe
+import { useNightPlanGeneration } from '@/hooks/useNightPlanGeneration';
 
 const NightPlanGenerator: React.FC = () => {
   const [budget, setBudget] = useState<string>('moderate');
   const [time, setTime] = useState<string>('evening');
   const [numPeople, setNumPeople] = useState<string>('2');
+  const [selectedMood, setSelectedMood] = useState<Vibe | null>(null); // Add state for selectedMood
 
-  // Use the custom hook for plan generation logic and state
   const { 
     generatedPlan, 
     parsedPlanData, 
@@ -19,8 +21,13 @@ const NightPlanGenerator: React.FC = () => {
     generatePlan 
   } = useNightPlanGeneration();
 
+  const handleSelectMood = (mood: Vibe) => { // Add handler for mood selection
+    setSelectedMood(prevMood => prevMood === mood ? null : mood);
+  };
+
   const handleFormSubmit = () => {
-    generatePlan(budget, time, numPeople);
+    // Pass selectedMood to generatePlan
+    generatePlan(budget, time, numPeople, selectedMood); 
   };
 
   return (
@@ -32,6 +39,12 @@ const NightPlanGenerator: React.FC = () => {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
+        {/* Add PromptCarousel here */}
+        <div className="mb-6">
+          <h3 className="text-xl font-semibold mb-4 text-center text-gray-200">First, what's the vibe?</h3>
+          <PromptCarousel selectedMood={selectedMood} onSelectMood={handleSelectMood} />
+        </div>
+        
         <NightPlanForm
           budget={budget}
           setBudget={setBudget}
@@ -39,9 +52,9 @@ const NightPlanGenerator: React.FC = () => {
           setTime={setTime}
           numPeople={numPeople}
           setNumPeople={setNumPeople}
-          handleGeneratePlan={handleFormSubmit} // Pass the new handler
-          isLoading={isLoading} // Get from hook
-          error={error} // Get from hook
+          handleGeneratePlan={handleFormSubmit}
+          isLoading={isLoading}
+          error={error}
         />
       </CardContent>
       
@@ -55,4 +68,3 @@ const NightPlanGenerator: React.FC = () => {
 };
 
 export default NightPlanGenerator;
-

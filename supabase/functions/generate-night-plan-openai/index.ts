@@ -10,15 +10,14 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     console.log("Handling OPTIONS request");
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { budget, time, numPeople } = await req.json();
-    console.log("Received request with params:", { budget, time, numPeople });
+    const { budget, time, numPeople, mood } = await req.json(); // Added mood
+    console.log("Received request with params:", { budget, time, numPeople, mood });
 
     if (!openAIApiKey) {
       console.error("OpenAI API key is not set in environment variables.");
@@ -28,7 +27,12 @@ serve(async (req) => {
       });
     }
 
-    const prompt = `Generate a fun and unique night out plan in St. Augustine, Florida for ${numPeople} people, with a ${budget} budget, for the ${time}. Suggest 2-3 distinct venues or activities with brief, exciting descriptions. The output should be a concise plan.`;
+    let moodString = "";
+    if (mood) {
+      moodString = ` The desired vibe for the night is ${mood}.`;
+    }
+
+    const prompt = `Generate a fun and unique night out plan in St. Augustine, Florida for ${numPeople} people, with a ${budget} budget, for the ${time}.${moodString} Suggest 2-3 distinct venues or activities with brief, exciting descriptions for each. The output should be a concise plan formatted in markdown with clear headings for each venue/activity (e.g., "### Venue/Activity Name") followed by a short teaser/description. Include an overall title for the plan using a single H1 heading (e.g., "# Your Awesome Night Out"). If possible, include a fun tip or a short "Good to Know" section at the end.`;
     console.log("Constructed prompt:", prompt);
 
     console.log("Sending request to OpenAI API...");
@@ -39,13 +43,13 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini', // Using gpt-4o-mini as a capable and cost-effective model
+        model: 'gpt-4o-mini',
         messages: [
-          { role: 'system', content: 'You are a helpful assistant that generates exciting night out plans in St. Augustine, Florida. Be concise and focus on actionable suggestions.' },
+          { role: 'system', content: 'You are a helpful assistant that generates exciting night out plans in St. Augustine, Florida. Your plans should be well-structured in Markdown, including an H1 title for the overall plan, H3 titles for each venue/activity, and a brief teaser. Optionally, include a "Good to Know" or "Pro Tip" section at the end.' },
           { role: 'user', content: prompt },
         ],
         temperature: 0.7,
-        max_tokens: 300,
+        max_tokens: 400, // Increased slightly to accommodate mood and potentially longer descriptions
       }),
     });
 
