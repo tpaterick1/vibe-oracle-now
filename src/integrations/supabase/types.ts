@@ -9,6 +9,60 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      external_events: {
+        Row: {
+          created_at: string
+          end_datetime: string | null
+          event_description: string | null
+          event_title: string
+          event_type: string
+          id: string
+          image_url: string | null
+          lat: number | null
+          lng: number | null
+          scraped_at: string | null
+          source_url: string | null
+          start_datetime: string
+          updated_at: string
+          venue_address: string | null
+          venue_name: string | null
+        }
+        Insert: {
+          created_at?: string
+          end_datetime?: string | null
+          event_description?: string | null
+          event_title: string
+          event_type: string
+          id?: string
+          image_url?: string | null
+          lat?: number | null
+          lng?: number | null
+          scraped_at?: string | null
+          source_url?: string | null
+          start_datetime: string
+          updated_at?: string
+          venue_address?: string | null
+          venue_name?: string | null
+        }
+        Update: {
+          created_at?: string
+          end_datetime?: string | null
+          event_description?: string | null
+          event_title?: string
+          event_type?: string
+          id?: string
+          image_url?: string | null
+          lat?: number | null
+          lng?: number | null
+          scraped_at?: string | null
+          source_url?: string | null
+          start_datetime?: string
+          updated_at?: string
+          venue_address?: string | null
+          venue_name?: string | null
+        }
+        Relationships: []
+      }
       venues: {
         Row: {
           created_at: string

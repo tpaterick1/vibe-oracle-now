@@ -21,6 +21,22 @@ const GOOGLE_MAPS_API_KEY = "AIzaSyD-TDEZAjo3rzWroKTxf-StVJbo64DjvPk";
 // Default center for St. Augustine, FL
 const ST_AUGUSTINE_COORDS = { lat: 29.894695, lng: -81.314493 };
 
+// Interface for External Events based on the Supabase table
+interface ExternalEvent {
+  id: string;
+  event_title: string;
+  event_description: string | null;
+  event_type: string;
+  start_datetime: string;
+  end_datetime: string | null;
+  venue_name: string | null;
+  venue_address: string | null;
+  lat: number | null;
+  lng: number | null;
+  source_url: string | null;
+  image_url: string | null;
+}
+
 const fetchVenues = async (): Promise<Venue[]> => {
   // Using select aliasing to map snake_case columns to camelCase properties
   const { data, error } = await supabase
@@ -50,6 +66,35 @@ const fetchVenues = async (): Promise<Venue[]> => {
   })) || [];
 };
 
+const fetchExternalEvents = async (): Promise<ExternalEvent[]> => {
+  const { data, error } = await supabase
+    .from('external_events')
+    .select(`
+      id,
+      event_title,
+      event_description,
+      event_type,
+      start_datetime,
+      end_datetime,
+      venue_name,
+      venue_address,
+      lat,
+      lng,
+      source_url,
+      image_url
+    `)
+    // Fetch events starting from today or in the future, limit to 50 for performance
+    .gte('start_datetime', new Date().toISOString().split('T')[0] + 'T00:00:00.000Z') 
+    .order('start_datetime', { ascending: true })
+    .limit(50);
+
+  if (error) {
+    console.error('Error fetching external events:', error);
+    throw new Error(error.message);
+  }
+  return data || [];
+};
+
 const Index = () => {
   const [selectedMood, setSelectedMood] = useState<Vibe | null>(null);
   const { user, logout, isLoading: authLoading } = useAuth();
@@ -57,6 +102,11 @@ const Index = () => {
   const allVenuesQuery = useQuery<Venue[], Error>({
     queryKey: ['venues'],
     queryFn: fetchVenues,
+  });
+
+  const externalEventsQuery = useQuery<ExternalEvent[], Error>({
+    queryKey: ['external_events'],
+    queryFn: fetchExternalEvents,
   });
 
   const handleSelectMood = (mood: Vibe) => {
@@ -75,10 +125,36 @@ const Index = () => {
   }, [selectedMood, allVenuesQuery.data]);
 
   const venuesForMap = useMemo(() => {
-    if (!allVenuesQuery.data) return [];
-    // If specific venues are filtered, show them. Otherwise, show a default set on the map.
-    return filteredVenues.length > 0 ? filteredVenues : allVenuesQuery.data.slice(0,5);
-  }, [selectedMood, filteredVenues, allVenuesQuery.data]);
+    const baseVenues: Venue[] = [];
+    if (allVenuesQuery.data) {
+      // Use filteredVenues if a mood is selected, otherwise show a default set of venues (e.g., first 5)
+      // This logic remains consistent with previous behavior for venues.
+      baseVenues.push(...(filteredVenues.length > 0 ? filteredVenues : allVenuesQuery.data.slice(0, 5)));
+    }
+
+    const mappedEvents: Venue[] = [];
+    if (externalEventsQuery.data) {
+      externalEventsQuery.data.forEach(ev => {
+        if (ev.lat != null && ev.lng != null) { // Ensure lat/lng are present
+          mappedEvents.push({
+            id: `event-${ev.id}`, // Prefix ID to avoid collision with venue IDs
+            name: ev.event_title,
+            lat: ev.lat,
+            lng: ev.lng,
+            vibeTags: [], // Events don't have VibeTags in the same way venues do
+            story: `Event Type: ${ev.event_type}. ${ev.event_description || ''}. Starts: ${new Date(ev.start_datetime).toLocaleString()}. ${ev.venue_name ? 'At: ' + ev.venue_name : ''}`,
+            image: ev.image_url || '/placeholder.svg',
+            // Using distinct colors for event markers, assuming VenueMap might use these
+            neonColorClass: 'neon-border-yellow-500', 
+            textColorClass: 'text-neon-yellow',
+            // created_at and updated_at are not part of the core Venue structure for the map.
+          });
+        }
+      });
+    }
+    // Combine venues and mapped events for the map
+    return [...baseVenues, ...mappedEvents];
+  }, [filteredVenues, allVenuesQuery.data, externalEventsQuery.data]);
 
   return (
     <div className="min-h-screen bg-brand-deep-black text-foreground p-4 md:p-8 selection:bg-neon-pink selection:text-white">
@@ -172,13 +248,17 @@ const Index = () => {
            <h3 className="text-3xl font-semibold mb-6 text-center neon-text-teal animate-fade-in-up" style={{animationDelay: '0.4s'}}>
               Find Your Vibe on the Map
             </h3>
-          {allVenuesQuery.isLoading ? (
+          {(allVenuesQuery.isLoading || externalEventsQuery.isLoading) ? (
             <div className="flex justify-center items-center h-64 bg-brand-charcoal rounded-lg">
               <Loader2 className="h-12 w-12 neon-text-teal animate-spin" />
+              <p className="ml-4 text-lg neon-text-teal">Loading map data...</p>
             </div>
-          ) : allVenuesQuery.isError ? (
-            <div className="flex justify-center items-center h-64 bg-brand-charcoal rounded-lg">
-              <p className="text-neon-red">Error loading map data.</p>
+          ) : (allVenuesQuery.isError || externalEventsQuery.isError) ? (
+            <div className="text-center py-12 bg-brand-charcoal rounded-lg p-6">
+              <Info className="mx-auto h-12 w-12 neon-text-red mb-4" />
+              <p className="text-2xl neon-text-red">Error loading map data.</p>
+              {allVenuesQuery.isError && <p className="text-muted-foreground mt-1">Venues: {allVenuesQuery.error?.message}</p>}
+              {externalEventsQuery.isError && <p className="text-muted-foreground mt-1">Events: {externalEventsQuery.error?.message}</p>}
             </div>
           ) : (
             <VenueMap 
