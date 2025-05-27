@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { moods, Vibe } from '@/data/venues';
 import { Button } from '@/components/ui/button';
@@ -12,9 +13,7 @@ interface PromptCarouselProps {
 const PromptCarousel: React.FC<PromptCarouselProps> = ({ selectedMood, onSelectMood }) => {
   return (
     <div className="my-8 animate-fade-in-up animation-delay-400">
-      <h2 className="text-3xl font-bold mb-8 text-center neon-text-lavender tracking-tight animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
-        What's the vibe for tonight? {/* Updated title */}
-      </h2>
+      {/* Removed h2 title: "What's the vibe for tonight?" */}
       <div className="flex flex-wrap justify-center gap-3 md:gap-4 px-4">
         {moods.map((mood, index) => {
           const IconComponent = moodIcons[mood.name];
@@ -25,11 +24,11 @@ const PromptCarousel: React.FC<PromptCarouselProps> = ({ selectedMood, onSelectM
               onClick={() => onSelectMood(mood.name)}
               className={cn(
                 "text-lg px-6 py-5 rounded-lg border-2 transition-all duration-300 ease-in-out transform hover:scale-105 focus:scale-105",
-                "glassmorphism-card border-opacity-50 hover:border-opacity-100", // glassmorphism-card now provides default neon border
+                "glassmorphism-card border-opacity-50 hover:border-opacity-100", 
                 selectedMood === mood.name
-                  ? `${mood.color} text-white ${mood.shadow} border-transparent scale-105` // Selected: specific neon color, white text, its own shadow, transparent border (bg acts as border)
-                  : "text-muted-foreground hover:text-white", // Not selected: muted text (light gray), hover to white text. Border comes from glassmorphism-card.
-                `hover:${mood.color} hover:border-transparent hover:${mood.shadow}` // Hover: specific neon color, its shadow
+                  ? `${mood.color} text-white ${mood.shadow} border-transparent scale-105` 
+                  : "text-muted-foreground hover:text-white", 
+                `hover:${mood.color} hover:border-transparent hover:${mood.shadow}` 
               )}
               style={{ animationDelay: `${index * 100}ms` }}
             >

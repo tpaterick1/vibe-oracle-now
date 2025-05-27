@@ -1,16 +1,17 @@
+
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card"; // Removed CardHeader, CardTitle, CardDescription
 import NightPlanForm from './NightPlanForm';
 import NightPlanDisplay from './NightPlanDisplay';
-import PromptCarousel from '@/components/PromptCarousel'; // Import PromptCarousel
-import { Vibe } from '@/data/venues'; // Import Vibe
+import PromptCarousel from '@/components/PromptCarousel';
+import { Vibe } from '@/data/venues';
 import { useNightPlanGeneration } from '@/hooks/useNightPlanGeneration';
 
 const NightPlanGenerator: React.FC = () => {
-  const [budget, setBudget] = useState<string>('< $50'); // Updated default budget
-  const [time, setTime] = useState<string>('Evening'); // Default time
+  const [budget, setBudget] = useState<string>('< $50');
+  const [time, setTime] = useState<string>('Evening');
   const [numPeople, setNumPeople] = useState<string>('2');
-  const [selectedMood, setSelectedMood] = useState<Vibe | null>(null); // Add state for selectedMood
+  const [selectedMood, setSelectedMood] = useState<Vibe | null>(null);
 
   const { 
     generatedPlan, 
@@ -20,27 +21,21 @@ const NightPlanGenerator: React.FC = () => {
     generatePlan 
   } = useNightPlanGeneration();
 
-  const handleSelectMood = (mood: Vibe) => { // Add handler for mood selection
+  const handleSelectMood = (mood: Vibe) => {
     setSelectedMood(prevMood => prevMood === mood ? null : mood);
   };
 
   const handleFormSubmit = () => {
-    // Pass selectedMood to generatePlan
     generatePlan(budget, time, numPeople, selectedMood); 
   };
 
   return (
     <Card className="w-full max-w-4xl mx-auto my-12 glassmorphism-card border-neon-purple animate-fade-in-up" style={{animationDelay: '1.2s'}}>
-      <CardHeader>
-        <CardTitle className="neon-text-purple text-2xl md:text-3xl text-center">Generate Your Perfect Night Out</CardTitle>
-        <CardDescription className="text-center text-gray-400">
-          Let AI craft a personalized plan for your St. Augustine adventure!
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-8 py-8"> {/* Increased space-y and added py */}
-        {/* Add PromptCarousel here */}
-        <div className="mb-6">
-          <h3 className="text-xl font-semibold mb-4 text-center text-gray-200">First, what's the vibe?</h3>
+      {/* CardHeader has been removed */}
+      <CardContent className="space-y-8 py-8">
+        {/* PromptCarousel is now the first item */}
+        <div className="mb-6"> 
+          {/* Removed h3: "First, what's the vibe?" */}
           <PromptCarousel selectedMood={selectedMood} onSelectMood={handleSelectMood} />
         </div>
         
